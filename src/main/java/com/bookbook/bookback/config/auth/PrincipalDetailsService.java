@@ -1,7 +1,7 @@
 package com.bookbook.bookback.config.auth;
 
-import com.bookbook.bookback.model.User;
-import com.bookbook.bookback.repository.UserRepository;
+import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

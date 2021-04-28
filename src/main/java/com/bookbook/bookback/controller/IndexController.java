@@ -1,8 +1,8 @@
 package com.bookbook.bookback.controller;
 
 import com.bookbook.bookback.config.auth.PrincipalDetails;
-import com.bookbook.bookback.model.User;
-import com.bookbook.bookback.repository.UserRepository;
+import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.GrantedAuthority;

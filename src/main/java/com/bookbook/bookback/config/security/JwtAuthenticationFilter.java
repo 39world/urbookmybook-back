@@ -1,4 +1,4 @@
-package com.bookbook.bookback.config;
+package com.bookbook.bookback.config.security;
 
 
 import lombok.RequiredArgsConstructor;

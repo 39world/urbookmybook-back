@@ -1,6 +1,6 @@
-package com.bookbook.bookback.repository;
+package com.bookbook.bookback.domain.repository;
 
-import com.bookbook.bookback.model.User;
+import com.bookbook.bookback.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

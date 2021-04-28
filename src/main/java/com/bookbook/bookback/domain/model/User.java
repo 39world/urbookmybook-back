@@ -1,4 +1,4 @@
-package com.bookbook.bookback.model;
+package com.bookbook.bookback.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,13 +1,13 @@
 package com.bookbook.bookback.config.oauth;
 
 
-import com.bookbook.bookback.config.JwtTokenProvider;
+import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.config.auth.PrincipalDetails;
 import com.bookbook.bookback.config.oauth.provider.FaceBookUserInfo;
 import com.bookbook.bookback.config.oauth.provider.GoogleUserInfo;
 import com.bookbook.bookback.config.oauth.provider.OAuth2UserInfo;
-import com.bookbook.bookback.model.User;
-import com.bookbook.bookback.repository.UserRepository;
+import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
