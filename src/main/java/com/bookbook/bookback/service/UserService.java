@@ -5,6 +5,7 @@ import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,10 +14,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void registerUser(UserDto userDto) {
-        String pattern = "^[0-9]*$";
+
+        String rawPassword = userDto.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        userDto.setPassword(encPassword);
+        userDto.setRole("ROLE_USER");
+
+//        String pattern = "^[0-9]*$";
         String email = userDto.getEmail();
 
 
@@ -37,11 +44,15 @@ public class UserService {
             throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
         }
 
-//        여기서부터 수정 시작
-//        userRepository.save(User.builder()
-//                .username(username)
-//                .password(passwordEncoder.encode(userDto.getPassword()))
-//                .phone(userDto.())
-//                .build());
+
+        userRepository.save(User.builder()
+                .username(userDto.getUsername())
+                .password(userDto.getPassword())
+                .email(email)
+                .role(userDto.getRole())
+                .image(userDto.getImage())
+                .address(userDto.getAddress())
+                .comment(userDto.getComment())
+                .build());
     }
 }

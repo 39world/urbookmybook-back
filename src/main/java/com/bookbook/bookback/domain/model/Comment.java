@@ -25,7 +25,4 @@ public class Comment extends Timestamped {
     @JoinColumn(name="TOWNBOOK_ID", nullable=false)
     private TownBook townBook;
 
-
-
-
 }
