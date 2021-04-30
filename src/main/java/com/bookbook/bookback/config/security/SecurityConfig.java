@@ -44,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.headers().frameOptions().sameOrigin();
 
         http
-//                .cors() //spring Security에 앞서 cors가 먼저 수행되도록
-//                .and()
+                .cors() //spring Security에 앞서 cors가 먼저 수행되도록
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // preflight 요청에 대해 401응답을 내려주지 않도록 함
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 //.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
                 //.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') and hasRole('ROLE_USER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/h2-console/**", "/api/signup", "/api/login","api/usercheck").permitAll()
+                .antMatchers("/h2-console/**", "/api/signup", "/api/login","api/usercheck","/login").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

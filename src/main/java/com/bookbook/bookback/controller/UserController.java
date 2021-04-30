@@ -85,6 +85,7 @@ public class UserController {
                 .email(user.get("email"))
                 .password(passwordEncoder.encode(user.get("password")))
                 .username(user.get("username"))
+                .role("ROLE_USER")
                 .build()).getId();
     }
     @PostMapping("/api/login")
