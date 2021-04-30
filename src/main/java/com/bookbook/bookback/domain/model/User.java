@@ -34,4 +34,15 @@ public class User {
     private String providerId;
     @CreationTimestamp
     private Timestamp createdAt;
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User)
+            return id==((User)obj).id;
+        else
+            return false;
+    }
+
 }
