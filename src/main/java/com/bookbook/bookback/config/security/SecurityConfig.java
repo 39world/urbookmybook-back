@@ -1,32 +1,28 @@
 package com.bookbook.bookback.config.security;
 
 
-import com.bookbook.bookback.config.oauth.PrincipalOauth2UserService;
-import com.bookbook.bookback.config.security.JwtTokenProvider;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsUtils;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @RequiredArgsConstructor
-@Configuration // IoC 빈(bean)을 등록
-@EnableWebSecurity // 필터 체인 관리 시작 어노테이션
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // 특정 주소 접근시 권한 및 인증을 위한 어노테이션 활성화
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private PrincipalOauth2UserService principalOauth2UserService;
-
+    // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
     public BCryptPasswordEncoder encodePwd() {
         return new BCryptPasswordEncoder();
@@ -39,36 +35,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return super.authenticationManagerBean();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.headers().frameOptions().sameOrigin();
+        http.headers().frameOptions().disable();
 
         http
-//                .cors() //spring Security에 앞서 cors가 먼저 수행되도록
-//                .and()
-                .csrf().disable()
+                .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
+                .csrf().disable() // csrf 보안 토큰 disable처리.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+                .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // preflight 요청에 대해 401응답을 내려주지 않도록 함
-                .antMatchers("/user/**").authenticated()
-                //.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-                //.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') and hasRole('ROLE_USER')")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/loginProc")
-                .defaultSuccessUrl("/")
-                .and()
-                .oauth2Login()
-                .loginPage("/login")
-                .userInfoEndpoint()
-                .userService(principalOauth2UserService)
-                .and()
-                .permitAll()
-                .and()
-                .logout();
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
+        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+
     }
 }
 

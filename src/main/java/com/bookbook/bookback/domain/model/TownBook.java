@@ -1,33 +1,74 @@
 package com.bookbook.bookback.domain.model;
 
 
+import com.bookbook.bookback.domain.dto.TownBookDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
-@Entity
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
-public class TownBook {
-
-    @Id
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class TownBook extends Timestamped {
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Id
+    @Column(name = "townBookId", nullable = true)
+    private Long townBookId;
 
-    @Column(nullable= false)
-    private String author;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
-    @Column(nullable= false)
+    @Column(name = "image", nullable = true)
     private String image;
 
-    @Column(nullable= false)
-    private String status;
-
-    @Column(columnDefinition = "TEXT", nullable= false)
+    @Column(name = "description",nullable = true)
     private String description;
 
-    @Column(nullable= false)
+    @Column(name = "author", nullable = true)
+    private String author;
+
+    @Column(name = "price", nullable = true)
+    private int price;
+
+    @Column(name = "state", nullable = true)
+    private String state;
+
+    @Column(name = "category", nullable = true)
     private String category;
 
-    @Column(nullable= false)
-    private Integer price;
+
+
+
+
+
+    public TownBook(TownBookDto townBookDto, User user){
+        this.author = townBookDto.getAuthor();
+        this.image = townBookDto.getImage();
+        this.category =townBookDto.getCategory();
+        this.description =townBookDto.getDescription();
+        this.state = townBookDto.getState();
+        this.price = townBookDto.getPrice();
+        this.user = user;
+
+
+    }
+    public void update(TownBookDto townBookDto){
+        this.author = townBookDto.getAuthor();
+        this.image = townBookDto.getImage();
+        this.category =townBookDto.getCategory();
+        this.description =townBookDto.getDescription();
+        this.state = townBookDto.getState();
+        this.price = townBookDto.getPrice();
+
+    }
+
+
+
+
 }

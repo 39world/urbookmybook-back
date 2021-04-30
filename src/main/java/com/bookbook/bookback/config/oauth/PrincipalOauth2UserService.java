@@ -73,7 +73,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .role("ROLE_USER")
                     .provider(oAuth2UserInfo.getProvider())
                     .providerId(oAuth2UserInfo.getProviderId())
-                    .img(oAuth2UserInfo.getPicture())
+                    .image(oAuth2UserInfo.getPicture())
                     .build();
             userRepository.save(user);
         }

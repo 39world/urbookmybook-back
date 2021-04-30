@@ -1,6 +1,8 @@
 package com.bookbook.bookback.service;
 
 
+import com.bookbook.bookback.config.security.JwtTokenProvider;
+import com.bookbook.bookback.domain.controllerReturn.UserReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.UserRepository;
@@ -16,9 +18,9 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
-    @Transactional
     public void registerUser(UserDto userDto) {
 
         String rawPassword = userDto.getPassword();
@@ -58,4 +60,30 @@ public class UserService {
                 .comment(userDto.getComment())
                 .build());
     }
+
+    public UserReturn login(UserDto userDto) {
+        UserReturn userReturn = new UserReturn();
+
+        try{
+            User member = userRepository.findByUsername(userDto.getUsername());
+
+            if (!bCryptPasswordEncoder.matches(userDto.getPassword(), member.getPassword())) {
+                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            }
+            String token= jwtTokenProvider.createToken(member.getUsername());
+            userReturn.setToken(token);
+        }
+        catch(IllegalArgumentException e){
+            userReturn.setOk(false);
+            userReturn.setMsg(e.getMessage());
+            return userReturn;
+        }
+
+        userReturn.setOk(true);
+        userReturn.setMsg("로그인이 완료되었습니다.");
+        return userReturn;
+    }
+
+
+
 }

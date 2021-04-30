@@ -18,11 +18,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-
-    private String secretKey = "bookbooksecretkey";
-
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    private String secretKey = "webfirewood";
 
     private final UserDetailsService userDetailsService;
 
@@ -32,11 +28,12 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-
     // JWT 토큰 생성
     public String createToken(String userPk) {
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
         Date now = new Date();
+        // 토큰 유효시간 30분
+        long tokenValidTime = 30 * 60 * 1000L;
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
@@ -57,45 +54,18 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-
-
-    // Request의 Header에서 token 값을 가져옵니다.
+    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Token");
+        return request.getHeader("X-AUTH-TOKEN");
     }
 
-//    // 토큰의 유효성 + 만료일자 확인
-//    public boolean validateToken(String jwtToken) {
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-//            return !claims.getBody().getExpiration().before(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-
+    // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
-        return this.getClaims(jwtToken) != null;
-    }
-
-    private Jws<Claims> getClaims(String jwtToken) {
         try {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-        } catch (SignatureException ex) {
-            log.error("Invalid JWT signature");
-            throw ex;
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-            throw ex;
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-            throw ex;
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-            throw ex;
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-            throw ex;
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
         }
     }
 }

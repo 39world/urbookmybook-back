@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
 
-    @Transactional
+
     public void createComment(CommentDto commentDto){
         Comment comment=new Comment(commentDto);
         commentRepository.save(comment);
