@@ -21,6 +21,8 @@ public class TownBookService {
 
     private final TownBookRepository townBookRepository;
     private final CommentRepository commentRepository;
+
+    //동네 책장 전체 조회
     public ResultReturn getTownBooks(){
         List<TownBook> townBookList = townBookRepository.findAll();
 
@@ -34,6 +36,7 @@ public class TownBookService {
         return new ResultReturn(true, "동네책방 등록 성공!");
 
     }
+    //등록한 책 정보 수정
     @Transactional
     public ResultReturn updateTownBook(Long townBookId, TownBookDto townBookDto, User user){
         TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
@@ -55,7 +58,7 @@ public class TownBookService {
 
     }
 
-
+    //등록한 책 삭제
     public ResultReturn deleteTownBook(Long townBookId,User user){
         TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
                 () -> new IllegalArgumentException("책이 존재하지 않습니다.")

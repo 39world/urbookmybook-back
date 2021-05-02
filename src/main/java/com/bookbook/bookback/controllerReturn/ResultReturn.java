@@ -3,6 +3,8 @@ package com.bookbook.bookback.controllerReturn;
 import lombok.Getter;
 import lombok.Setter;
 
+
+//응답 정보
 @Setter
 @Getter
 public class ResultReturn {

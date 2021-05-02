@@ -19,6 +19,8 @@ import javax.transaction.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TownBookRepository townBookRepository;
+
+    //댓글 등록
     public ResultReturn createComment(CommentDto commentDto,Long townBookId,User user){
         if(user==null){
             return new ResultReturn(false, "로그인이 필요한 서비스입니다.");
@@ -36,6 +38,7 @@ public class CommentService {
     }
 
 
+    //댓글 수정
     @Transactional
     public ResultReturn updateComment(CommentDto commentDto,Long commentId,User user){
         if(user==null){
@@ -56,7 +59,7 @@ public class CommentService {
         }
     }
 
-
+    //댓글 삭제
     public ResultReturn deleteComment(Long commentId, User user){
         //로그인 확인
         if(user==null)

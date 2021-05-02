@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.util.List;
 
+//상세페이지 정보
 @Getter
 public class DetailReturn {
 

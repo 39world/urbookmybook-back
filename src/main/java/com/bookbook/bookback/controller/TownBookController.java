@@ -20,12 +20,15 @@ public class TownBookController {
     private final TownBookService townBookService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+
+    //동네책장 전체 조회
     @GetMapping("/api/townbooks")
     public ResultReturn getTownBooks(){
 
         return townBookService.getTownBooks();
     }
 
+    //동네책장에 책 등록
     @PostMapping("/api/townbooks")
     public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -37,6 +40,7 @@ public class TownBookController {
 
     }
 
+    //등록한 책 정보 수정
     @PutMapping("/api/townbooks/{townBookId}")
     public ResultReturn updateTownBook(@PathVariable Long townBookId, @RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -47,6 +51,7 @@ public class TownBookController {
         return townBookService.updateTownBook(townBookId,townBookDto, user);
     }
 
+    //등록한 책 삭제
     @DeleteMapping("/api/townbooks/{townBookId}")
     public ResultReturn deleteTownBook(@PathVariable Long townBookId,HttpServletRequest httpServletRequest) {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -58,6 +63,7 @@ public class TownBookController {
     }
 
 
+    //상세 페이지 정보 조회
     @GetMapping("/api/townbooks/{townBookId}")
     public DetailReturn detail(@PathVariable Long townBookId) {
         return townBookService.detailTownBook(townBookId);
