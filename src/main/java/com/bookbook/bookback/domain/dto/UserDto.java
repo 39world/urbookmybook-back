@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 @Getter
 public class UserDto {
-    private int id;
+    private Long id;
     private String username;
     private String email;
     private String image;

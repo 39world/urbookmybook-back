@@ -21,13 +21,15 @@ import java.sql.Timestamp;
 public class User {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String username;
     private String password;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
+
     private String image;
     private String town;
+//    private String address;
     private String comment;
     private String myBook; //추후 구체적으로 수정 필요 ex) JSON or List<String> or List<int>
     private Double star;  //별점 업데이트 추가 필요. 업데이트 시점, 평점 내는 로직 구현
@@ -35,7 +37,7 @@ public class User {
     private String provider;
     private String providerId;
     @CreationTimestamp
-    private Timestamp createDate;
+    private Timestamp createdAt;
 
 
     public void update(UserDto userDto){

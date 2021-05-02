@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
+
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -80,7 +80,7 @@ public class UserController {
 
     // 기능 테스트용 자체 회원가입, 로그인
     @PostMapping("/api/signup")
-    public int join(@RequestBody Map<String, String> user) {
+    public Long join(@RequestBody Map<String, String> user) {
         return userRepository.save(User.builder()
                 .email(user.get("email"))
                 .password(passwordEncoder.encode(user.get("password")))
