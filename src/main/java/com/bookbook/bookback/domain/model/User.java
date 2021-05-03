@@ -39,6 +39,23 @@ public class User {
     @CreationTimestamp
     private Timestamp createdAt;
 
+//    [
+//    private String username
+//    private String email
+//    private String image
+//
+//
+//     public void update(userdto userdto)
+//     this.username = userDto.getUsername();
+//     this.image = userDto.getImage();
+//    ]
+
+
+    public User(UserDto userDto){
+        this.email = userDto.getEmail();
+        this.username = userDto.getUsername();
+        this.image = userDto.getImage();
+    }
 
     public void update(UserDto userDto){
         this.id = userDto.getId();

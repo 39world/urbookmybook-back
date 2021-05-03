@@ -2,9 +2,12 @@ package com.bookbook.bookback.domain.dto;
 
 import com.bookbook.bookback.domain.model.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @Getter
+@NoArgsConstructor
 public class UserDto {
     private Long id;
     private String username;

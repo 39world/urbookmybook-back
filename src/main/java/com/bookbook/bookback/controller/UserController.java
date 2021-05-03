@@ -1,6 +1,7 @@
 package com.bookbook.bookback.controller;
 
 import com.bookbook.bookback.config.security.JwtTokenProvider;
+import com.bookbook.bookback.controllerReturn.ResultReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -87,24 +89,52 @@ public class UserController {
     // 기능 테스트용 자체 회원가입, 로그인
     @PostMapping("/api/signup")
     public Long join(@RequestBody Map<String, String> user) {
-        return userRepository.save(User.builder()
+        return userRepository.save(User.builder( )
                 .email(user.get("email"))
                 .password(passwordEncoder.encode(user.get("password")))
                 .username(user.get("username"))
                 .role("ROLE_USER")
                 .build()).getId();
     }
+
+    //google social login test code
     @PostMapping("/api/login")
-    public UserDto login(@RequestBody Map<String, String> user) {
-        User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+    public ResultReturn loginUser(@RequestBody UserDto userDto ) {
+        Optional<User> userOptional =userRepository.findByEmail(userDto.getEmail());
+//email 존재 여부 확인
+        if (userOptional.isPresent()){
+            User user =userOptional.get();
+            String token = jwtTokenProvider.createToken(user.getEmail());
+            return new ResultReturn(true, token,"회원가입이 된 사람입니다.");
         }
-        String token = jwtTokenProvider.createToken(member.getEmail());
-        UserDto userDto = new UserDto(token,member);
-        return userDto;
+        else{
+            User user = new User(userDto);
+            userRepository.save(user);
+            String token = jwtTokenProvider.createToken(user.getEmail());
+            return new ResultReturn(true, token,"로그인이 되었습니다.");
+        }
+
+
+
     }
+
+//        User user = userRepository.findByEmail(userDto.getEmail())
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+//
+//        return userDto;
+//    }
+//    @PostMapping("/api/login")
+//    public UserDto login(@RequestBody Map<String, String> user) {
+//        User member = userRepository.findByEmail(user.get("email"))
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+//
+//        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//        }
+//        String token = jwtTokenProvider.createToken(member.getEmail());
+//        UserDto userDto = new UserDto(token,member);
+//        return userDto;
+//    }
 
 
 }
