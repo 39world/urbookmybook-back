@@ -29,13 +29,12 @@ public class TownBookService {
         return new ResultReturn(true, townBookList, "동네책방 리스트 반환 성공!");
     }
 
-    public ResultReturn createTownBook(User user,TownBookDto townBookDto, String image){
+    public ResultReturn createTownBook(User user,TownBookDto townBookDto, List<String> captureImages){
         townBookDto.setUser(user);
-        townBookDto.setImage(image);
+        townBookDto.setCaptureImages(captureImages);
         TownBook townBook = new TownBook(townBookDto);
         townBookRepository.save(townBook);
         return new ResultReturn(true, "동네책방 등록 성공!");
-
     }
     //등록한 책 정보 수정
     @Transactional
