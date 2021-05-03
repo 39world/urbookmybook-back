@@ -15,7 +15,6 @@ import java.util.UUID;
 public class FileUploadService {
 
     private final S3Service s3Service;
-
     public String uploadImage(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
 

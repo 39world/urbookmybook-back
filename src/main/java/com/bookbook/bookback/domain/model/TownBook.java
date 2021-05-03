@@ -8,6 +8,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -32,7 +33,10 @@ public class TownBook extends Timestamped {
     private String title;
 
     @Column(name = "image", nullable = true)
-    private String image;
+    private  String image;
+
+    @ElementCollection
+    private List<String> captureImages;
 
     @Column(name = "description",nullable = true)
     private String description;
@@ -54,6 +58,7 @@ public class TownBook extends Timestamped {
         this.title=townBookDto.getTitle();
         this.author = townBookDto.getAuthor();
         this.image = townBookDto.getImage();
+        this.captureImages=townBookDto.getCaptureImages();
         this.category =townBookDto.getCategory();
         this.description =townBookDto.getDescription();
         this.status = townBookDto.getStatus();
@@ -65,6 +70,7 @@ public class TownBook extends Timestamped {
         this.title=townBookDto.getTitle();
         this.author = townBookDto.getAuthor();
         this.image = townBookDto.getImage();
+        this.captureImages=townBookDto.getCaptureImages();
         this.category =townBookDto.getCategory();
         this.description =townBookDto.getDescription();
         this.status = townBookDto.getStatus();
