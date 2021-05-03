@@ -43,6 +43,7 @@ public class TownBookController {
 
         List<String> captureImages=new ArrayList<>();
         for(MultipartFile file: files){
+            System.out.println(file);
             String image= fileUploadService.uploadImage(file);
             captureImages.add(image);
         }
