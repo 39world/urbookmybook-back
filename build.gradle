@@ -37,8 +37,6 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')
-//    implementation 'org.springframework.cloud:spring-cloud-starter-security:2.1.2.RELEASE'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-oauth2:2.1.2.RELEASE'
     implementation 'com.google.code.gson:gson'
 
 
