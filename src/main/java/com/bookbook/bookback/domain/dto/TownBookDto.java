@@ -11,14 +11,11 @@ import java.util.List;
 public class TownBookDto {
     private String title;
     private String image;
-    private List<String> captureImages;
+//    private List<String> captureImages;
     private String description;
     private String author;
     private int price;
     private String status;
     private String category;
     private User user;
-
-
-
 }

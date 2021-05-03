@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,7 +33,7 @@ public class TownBookController {
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestParam List<MultipartFile> files, @RequestParam(required = false) TownBookDto townBookDto, HttpServletRequest httpServletRequest){
+    public ResultReturn createTownBook(@RequestPart MultipartFile file, @RequestPart TownBookDto townBookDto, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
@@ -45,14 +44,11 @@ public class TownBookController {
 //            return new ResultReturn(false, "실패!");
 //        }
 
-        System.out.println(townBookDto.getAuthor()+ townBookDto.getCategory());
-        List <String> captureImages=new ArrayList<>();
-        for (MultipartFile file : files){
-            String image= fileUploadService.uploadImage(file);
-            captureImages.add(image);
-        }
-        System.out.println(captureImages);
-        return townBookService.createTownBook(user, townBookDto, captureImages);
+
+
+        String image= fileUploadService.uploadImage(file);
+        System.out.println(image);
+        return townBookService.createTownBook(user, townBookDto, image);
 
     }
 
