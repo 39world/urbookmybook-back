@@ -34,22 +34,30 @@ public class TownBookController {
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestPart List<MultipartFile> files, @RequestPart TownBookDto townBookDto, HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
+    public ResultReturn createTownBook(@RequestPart(required = false) MultipartFile file, @RequestPart(required = false) TownBookDto townBookDto){
+//        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+//        String email = jwtTokenProvider.getUserPk(token);
+//        User user = userRepository.findByEmail(email).orElseThrow(
+//                ()->new IllegalArgumentException("존재하지 않습니다.")
+//        );
+
+        User user =userRepository.findById(1L).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
 
-        List<String> captureImages=new ArrayList<>();
-        for(MultipartFile file: files){
-            System.out.println(file);
-            String image= fileUploadService.uploadImage(file);
-            captureImages.add(image);
-        }
 
-        System.out.println(captureImages);
-        return townBookService.createTownBook(user, townBookDto, captureImages);
+        if(townBookDto==null){
+            return new ResultReturn(false, "Dto가 존재하지 않습니다");
+        }
+        String image= fileUploadService.uploadImage(file);
+
+//        List<String> captureImages=new ArrayList<>();
+//        for(MultipartFile captureFile: captureFiles){
+//            String captureImage= fileUploadService.uploadImage(captureFile);
+//            captureImages.add(captureImage);
+//        }
+
+        return townBookService.createTownBook(user, townBookDto, image);
 
     }
 
