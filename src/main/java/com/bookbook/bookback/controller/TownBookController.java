@@ -40,16 +40,20 @@ public class TownBookController {
 //        User user = userRepository.findByEmail(email).orElseThrow(
 //                ()->new IllegalArgumentException("존재하지 않습니다.")
 //        );
-
+        System.out.println(townBookDto);
         User user =userRepository.findById(1L).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
+        if(file==null){
+            return new ResultReturn(false, "file이 존재하지 않습니다");
+        }
 
-
+        String image= fileUploadService.uploadImage(file);
+        System.out.println(image);
         if(townBookDto==null){
             return new ResultReturn(false, "Dto가 존재하지 않습니다");
         }
-        String image= fileUploadService.uploadImage(file);
+        return new ResultReturn(true, "성공");
 
 //        List<String> captureImages=new ArrayList<>();
 //        for(MultipartFile captureFile: captureFiles){
@@ -57,8 +61,7 @@ public class TownBookController {
 //            captureImages.add(captureImage);
 //        }
 
-        return townBookService.createTownBook(user, townBookDto, image);
-
+//        return townBookService.createTownBook(user, townBookDto, image);
     }
 
     //등록한 책 정보 수정
