@@ -31,25 +31,29 @@ public class UserDto {
     }
 
     //유저 프로필 업데이트용 Dto 생성
-    //사진 파일이 항상 필요한 버전
-    public UserDto(User user, JSONObject userJson, String fileUrl){
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.username = userJson.getString("username");
-        if(fileUrl.isEmpty()){
-            this.image = user.getImage();
-        } else {
-            this.image = fileUrl;
-        }
-        this.town = userJson.getString("town");
-        this.comment = userJson.getString("comment");
-    }
+//    public UserDto(User user, JSONObject userJson, String fileUrl){
+//        this.id = user.getId();
+//        this.email = user.getEmail();
+//        this.username = userJson.getString("username");
+//        if(fileUrl.isEmpty()){
+//            this.image = user.getImage();
+//        } else {
+//            this.image = fileUrl;
+//        }
+//        this.town = userJson.getString("town");
+//        this.comment = userJson.getString("comment");
+//    }
 
         public UserDto(User user, JSONObject userJson){
         this.id = user.getId();
         this.email = user.getEmail();
         this.username = userJson.getString("username");
-        this.image = userJson.getString("image");
+        if(userJson.getString("image")==null){
+            this.image = user.getImage();
+        } else{
+            this.image = userJson.getString("image");
+        }
+        this.image = user.getImage();
         this.town = userJson.getString("town");
         this.comment = userJson.getString("comment");
     }

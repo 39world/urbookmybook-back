@@ -8,6 +8,7 @@ import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.FileUploadService;
 import com.bookbook.bookback.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.Map;
 import java.util.Optional;
-
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -42,49 +43,52 @@ public class UserController {
     }
 
     //프로필 수정  multipart date-form 데이터를 받아 수정 진행
-    //이 코드는 항상 file 데이터를 포함한 데이터가 와야함. 해결 가능할까 ?
-    @RequestMapping("/api/profile")
-    public UserDto profileChange(@RequestPart String userData, @RequestParam(required = false) MultipartFile file, HttpServletRequest httpServletRequest) {
-        JSONObject userJson = new JSONObject(userData);
-        //토근에서 사용자 정보 추출
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User member = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-        if(file == null){
-                UserDto userDto = new UserDto(member,userJson);
-                userService.update(userDto);
-                return userDto;
-        } else{
-            String fileUrl = fileUploadService.uploadImage(file);
-            //해당 사용자의 프로필 업데이트
-            UserDto userDto = new UserDto(member,userJson,fileUrl);
-            userService.update(userDto);
-            return userDto;
-        }
-    }
-
-//    //프로필 수정 파일 데이터 제외 버전.
-//    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
+    //front 요청으로 코드 수정
 //    @RequestMapping("/api/profile")
-//    public UserDto profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
-//        //토근에서 사용자 정보 추출
+//    public UserDto profileChange(@RequestPart String userData, @RequestParam(required = false) MultipartFile file, HttpServletRequest httpServletRequest) {
 //        JSONObject userJson = new JSONObject(userData);
+//        //토근에서 사용자 정보 추출
 //        String token = jwtTokenProvider.resolveToken(httpServletRequest);
 //        String email = jwtTokenProvider.getUserPk(token);
 //        User member = userRepository.findByEmail(email)
 //                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-//        //해당 사용자의 프로필 업데이트
-//        UserDto userDto = new UserDto(member,userJson);
-//        userService.update(userDto);
-//        return userDto;
+//        if(file == null){
+//                UserDto userDto = new UserDto(member,userJson);
+//                userService.update(userDto);
+//                return userDto;
+//        } else{
+//            String fileUrl = fileUploadService.uploadImage(file);
+//            //해당 사용자의 프로필 업데이트
+//            UserDto userDto = new UserDto(member,userJson,fileUrl);
+//            userService.update(userDto);
+//            return userDto;
+//        }
 //    }
+
+//    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
+    @RequestMapping("/api/profile")
+    public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
+        //토근에서 사용자 정보 추출
+        JSONObject userJson = new JSONObject(userData);
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User member = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
+        //해당 사용자의 프로필 업데이트
+        UserDto userDto = new UserDto(member,userJson);
+        userService.update(userDto);
+        return new ResultReturn(true, userDto,"이미지 파일 등록 완료.");
+    }
 //    //프로필 사진 등록 api
 //    //등록된 사진의 url을 반환
-//    @PostMapping("/api/upload")
-//    public String uploadImage(@RequestPart MultipartFile file) {
-//        return fileUploadService.uploadImage(file);
-//    }
+    @PostMapping("/api/upload")
+    public ResultReturn uploadImage(@RequestPart(required = false) MultipartFile file) {
+        if(file == null){
+            return new ResultReturn(true, "이미지 파일이 없습니다.");
+        } else{
+            return new ResultReturn(true, fileUploadService.uploadImage(file),"이미지 파일 등록 완료.");
+        }
+    }
 
     // 기능 테스트용 자체 회원가입, 로그인
     @PostMapping("/api/signup")
@@ -100,23 +104,42 @@ public class UserController {
     //google social login test code
     @PostMapping("/api/login")
     public ResultReturn loginUser(@RequestBody UserDto userDto ) {
-        Optional<User> userOptional =userRepository.findByEmail(userDto.getEmail());
-//email 존재 여부 확인
-        if (userOptional.isPresent()){
-            User user =userOptional.get();
+        log.info("email:{}, username:{}, imaege:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
+        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
+        //email 존재 여부 확인
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
             String token = jwtTokenProvider.createToken(user.getEmail());
-            return new ResultReturn(true, token,"회원가입이 된 사람입니다.");
-        }
-        else{
+            return new ResultReturn(true, token, "회원가입이 된 사람입니다.");
+        } else {
             User user = new User(userDto);
             userRepository.save(user);
             String token = jwtTokenProvider.createToken(user.getEmail());
-            return new ResultReturn(true, token,"로그인이 되었습니다.");
+            return new ResultReturn(true, token, "로그인이 되었습니다.");
+        }
+    }
+
+        @PostMapping("/api/test")
+        public void test1(@RequestPart(required = false) String data, @RequestParam( required = false) MultipartFile file){
+            System.out.println(data);
+            System.out.println(file);
+//            String fileUrl = fileUploadService.uploadImage(file);
+//            System.out.println(fileUrl);
+        }
+
+        @GetMapping("/api/test")
+        public User test2(){
+        User user = User.builder( )
+                .email("test")
+                .username("test2")
+                .role("ROLE_USER")
+                .build();
+        return user;
         }
 
 
 
-    }
+
 
 //        User user = userRepository.findByEmail(userDto.getEmail())
 //                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
