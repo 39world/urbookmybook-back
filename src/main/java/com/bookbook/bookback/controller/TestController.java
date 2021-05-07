@@ -79,7 +79,7 @@ public class TestController {
         ObjectMapper objectMapper = new ObjectMapper();
         TownBookDto dto = objectMapper.readValue(townBookDto, TownBookDto.class);
 
-        return townBookService.createTownBook(user, dto, image);
+        return new ResultReturn(true, "성공");
 
     }
 

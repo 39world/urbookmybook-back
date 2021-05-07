@@ -9,6 +9,8 @@ import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.FileUploadService;
 import com.bookbook.bookback.service.TownBookService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,34 +36,37 @@ public class TownBookController {
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestPart(required = false) MultipartFile file, @RequestPart(required = false) TownBookDto townBookDto){
+    public ResultReturn createTownBook(@RequestPart(required = false) List<MultipartFile> captureFiles, @RequestPart(required = false) String townBookDto) throws JsonProcessingException {
 //        String token = jwtTokenProvider.resolveToken(httpServletRequest);
 //        String email = jwtTokenProvider.getUserPk(token);
 //        User user = userRepository.findByEmail(email).orElseThrow(
 //                ()->new IllegalArgumentException("존재하지 않습니다.")
 //        );
         System.out.println(townBookDto);
+
         User user =userRepository.findById(1L).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
-        if(file==null){
+        if(captureFiles.isEmpty()){
             return new ResultReturn(false, "file이 존재하지 않습니다");
         }
+        List<String> captureImages=new ArrayList<>();
+        for(MultipartFile captureFile: captureFiles){
+            String captureImage= fileUploadService.uploadImage(captureFile);
 
-        String image= fileUploadService.uploadImage(file);
-        System.out.println(image);
+            System.out.println(captureImage);
+
+            captureImages.add(captureImage);
+        }
+
         if(townBookDto==null){
             return new ResultReturn(false, "Dto가 존재하지 않습니다");
         }
-        return new ResultReturn(true, "성공");
 
-//        List<String> captureImages=new ArrayList<>();
-//        for(MultipartFile captureFile: captureFiles){
-//            String captureImage= fileUploadService.uploadImage(captureFile);
-//            captureImages.add(captureImage);
-//        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        TownBookDto dto = objectMapper.readValue(townBookDto, TownBookDto.class);
 
-//        return townBookService.createTownBook(user, townBookDto, image);
+        return townBookService.createTownBook(user, dto, captureImages);
     }
 
     //등록한 책 정보 수정

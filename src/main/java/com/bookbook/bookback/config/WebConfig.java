@@ -1,6 +1,9 @@
 package com.bookbook.bookback.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -9,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @Configuration//설정파일이라는 것을 알려줌
 public class WebConfig implements WebMvcConfigurer {
+
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
