@@ -29,6 +29,7 @@ public class TownBookService {
         return new ResultReturn(true, townBookList, "동네책방 리스트 반환 성공!");
     }
 
+
     public ResultReturn createTownBook(User user,TownBookDto townBookDto, List<String> captureImages){
         townBookDto.setUser(user);
         townBookDto.setCaptureImages(captureImages);

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 // JpaRepository 를 상속하면 자동 컴포넌트 스캔됨.
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
     // SELECT * FROM user WHERE username = ?1
     User findByUsername(String username);
 
