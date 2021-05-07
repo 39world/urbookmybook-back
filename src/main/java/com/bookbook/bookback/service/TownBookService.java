@@ -10,6 +10,10 @@ import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.CommentRepository;
 import com.bookbook.bookback.domain.repository.TownBookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -55,7 +59,6 @@ public class TownBookService {
         }
 
 
-
     }
 
     //등록한 책 삭제
@@ -81,5 +84,12 @@ public class TownBookService {
 
     }
 
+    public Page<TownBook> getAllBooks(int page, int size, String sortBy, boolean isAsc) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return townBookRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
 
 }

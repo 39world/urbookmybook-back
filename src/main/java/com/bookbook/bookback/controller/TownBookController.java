@@ -10,6 +10,9 @@ import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.FileUploadService;
 import com.bookbook.bookback.service.TownBookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,6 +83,17 @@ public class TownBookController {
     @GetMapping("/api/townbooks/{townBookId}")
     public DetailReturn detail(@PathVariable Long townBookId) {
         return townBookService.detailTownBook(townBookId);
+    }
+
+    @GetMapping("/api/townbooks/page")
+    public Page<TownBook> getAllBooks(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc
+    ) {
+        page = page - 1;
+        return townBookService.getAllBooks(page , size, sortBy, isAsc);
     }
 
 }
