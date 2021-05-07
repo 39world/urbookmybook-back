@@ -18,4 +18,5 @@ public class TownBookDto {
     private String status;
     private String category;
     private User user;
+
 }

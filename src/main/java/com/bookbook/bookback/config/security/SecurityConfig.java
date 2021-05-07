@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @RequiredArgsConstructor
 @Configuration // IoC 빈(bean)을 등록
@@ -39,8 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return super.authenticationManagerBean();
     }
 
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.headers().frameOptions().sameOrigin();
 
         http
