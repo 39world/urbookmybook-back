@@ -27,11 +27,11 @@ public class TownBookService {
     private final CommentRepository commentRepository;
 
     //동네 책장 전체 조회
-    public ResultReturn getTownBooks(){
-        List<TownBook> townBookList = townBookRepository.findAll();
-
-        return new ResultReturn(true, townBookList, "동네책방 리스트 반환 성공!");
-    }
+//    public ResultReturn getTownBooks(){
+//        List<TownBook> townBookList = townBookRepository.findAll();
+//
+//        return new ResultReturn(true, townBookList, "동네책방 리스트 반환 성공!");
+//    }
 
 
     public ResultReturn createTownBook(User user,TownBookDto townBookDto){
@@ -80,16 +80,20 @@ public class TownBookService {
                 ()-> new IllegalArgumentException("책이 존재하지 않습니다")
         );
         List<Comment> comments = commentRepository.findByTownBookId(townBookId);
-        return new DetailReturn(true, townBook, comments, "성공!");
+        return new DetailReturn(true, townBook, comments, "상세 정보 반환을 성공했습니다.");
 
     }
 
-    public Page<TownBook> getAllBooks(int page, int size, String sortBy, boolean isAsc) {
+    public ResultReturn getAllBooks(User user, int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
+        Page<TownBook> townBookList= townBookRepository.findByTownOrderByCreatedAtDesc(user.getTown(), pageable);
 
-        return townBookRepository.findAllByOrderByCreatedAtDesc(pageable);
+        if(townBookList.isEmpty())
+            return new ResultReturn(false, "등록된 책이 없습니다.");
+        else
+            return new ResultReturn(true, townBookList, "동네책장 전체 반환을 성공했습니다.");
     }
 
     //제목을기반으로 검색하기

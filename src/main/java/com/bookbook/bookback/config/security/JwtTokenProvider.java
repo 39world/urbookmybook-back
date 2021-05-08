@@ -21,8 +21,8 @@ public class JwtTokenProvider {
 
     private String secretKey = "bookbooksecretkey";
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    // 토큰 유효시간 30분 * 2 * 24 * 7= 7일
+    private long tokenValidTime = 30 * 60 * 1000L* 2 * 24 * 7;
 
     private final UserDetailsService userDetailsService;
 

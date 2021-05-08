@@ -17,6 +17,10 @@ public class TownBookDto {
     private int price;
     private String status;
     private String category;
+    private String town;
+    private String publisher;
+    private String contentInfo;
+    private String webUrl;
     private User user;
 
 }

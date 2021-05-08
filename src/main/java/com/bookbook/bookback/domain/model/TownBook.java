@@ -29,11 +29,15 @@ public class TownBook extends Timestamped {
     private User user;
 
 
+
     @Column(name = "title", nullable = true)
     private String title;
 
     @Column(name = "image", nullable = true)
     private  String image;
+
+    @ElementCollection
+    private List<String> captureImages;
 
     @Column(columnDefinition = "TEXT", name = "description",nullable = true)
     private String description;
@@ -50,9 +54,19 @@ public class TownBook extends Timestamped {
     @Column(name = "category", nullable = true)
     private String category;
 
+    @Column(name="town", nullable=true)
+    private String town;
 
-    @ElementCollection
-    private List<String> captureImages;
+    @Column(name="publisher", nullable=true)
+    private String publisher;
+
+    @Column(name="contentInfo", nullable=true)
+    private String contentInfo;
+
+    @Column(name="web_url", nullable=true)
+    private String webUrl;
+
+
 
     public TownBook(TownBookDto townBookDto){
         this.username=townBookDto.getUser().getUsername();
@@ -64,6 +78,10 @@ public class TownBook extends Timestamped {
         this.description =townBookDto.getDescription();
         this.status = townBookDto.getStatus();
         this.price = townBookDto.getPrice();
+        this.town=townBookDto.getTown();
+        this.publisher=townBookDto.getPublisher();
+        this.contentInfo=townBookDto.getContentInfo();
+        this.webUrl=townBookDto.getContentInfo();
         this.user = townBookDto.getUser();
     }
 
@@ -76,10 +94,12 @@ public class TownBook extends Timestamped {
         this.description =townBookDto.getDescription();
         this.status = townBookDto.getStatus();
         this.price = townBookDto.getPrice();
+        this.town=townBookDto.getTown();
+        this.publisher=townBookDto.getPublisher();
+        this.contentInfo=townBookDto.getContentInfo();
+        this.webUrl=townBookDto.getContentInfo();
 
     }
-
-
 
 
 }
