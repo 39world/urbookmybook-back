@@ -35,7 +35,7 @@ public class TownBook extends Timestamped {
     @Column(name = "image", nullable = true)
     private  String image;
 
-    @Column(name = "description",nullable = true)
+    @Column(columnDefinition = "TEXT", name = "description",nullable = true)
     private String description;
 
     @Column(name = "author", nullable = true)

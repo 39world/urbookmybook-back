@@ -39,37 +39,24 @@ public class TownBookController {
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestPart(required = false) List<MultipartFile> captureFiles, @RequestPart(required = false) String townBookDto) throws JsonProcessingException {
+    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto) {
 //        String token = jwtTokenProvider.resolveToken(httpServletRequest);
 //        String email = jwtTokenProvider.getUserPk(token);
 //        User user = userRepository.findByEmail(email).orElseThrow(
 //                ()->new IllegalArgumentException("존재하지 않습니다.")
 //        );
-        System.out.println(townBookDto);
+        System.out.println("이미지: " + townBookDto.getImage());
 
         User user =userRepository.findById(1L).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
-        if(captureFiles.isEmpty()){
-            return new ResultReturn(false, "file이 존재하지 않습니다");
-        }
-        List<String> captureImages=new ArrayList<>();
-        for(MultipartFile captureFile: captureFiles){
-            String captureImage= fileUploadService.uploadImage(captureFile);
 
-            System.out.println(captureImage);
-
-            captureImages.add(captureImage);
-        }
 
         if(townBookDto==null){
             return new ResultReturn(false, "Dto가 존재하지 않습니다");
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        TownBookDto dto = objectMapper.readValue(townBookDto, TownBookDto.class);
-
-        return townBookService.createTownBook(user, dto, captureImages);
+        return townBookService.createTownBook(user, townBookDto);
     }
 
     //등록한 책 정보 수정

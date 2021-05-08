@@ -19,7 +19,7 @@ public class Comment extends Timestamped {
     @Column(nullable= false)
     private String username;
 
-    @Column(nullable=false)
+    @Column(columnDefinition = "TEXT",nullable=false)
     private String contents;
 
     @ManyToOne

@@ -34,9 +34,8 @@ public class TownBookService {
     }
 
 
-    public ResultReturn createTownBook(User user,TownBookDto townBookDto, List<String> captureImages){
+    public ResultReturn createTownBook(User user,TownBookDto townBookDto){
         townBookDto.setUser(user);
-        townBookDto.setCaptureImages(captureImages);
         TownBook townBook = new TownBook(townBookDto);
         townBookRepository.save(townBook);
         return new ResultReturn(true, "동네책방 등록 성공!");
