@@ -11,5 +11,6 @@ public interface TownBookRepository extends JpaRepository<TownBook,Long> {
 
     List<TownBook> findAll();
     Page<TownBook> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    List<TownBook> findByTitleContainingOrderByModifiedAtDesc(String keyword);
 
 }

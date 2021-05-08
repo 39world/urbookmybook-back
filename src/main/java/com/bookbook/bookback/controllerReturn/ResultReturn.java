@@ -1,7 +1,11 @@
 package com.bookbook.bookback.controllerReturn;
 
+import com.bookbook.bookback.domain.dto.CommentDto;
+import com.bookbook.bookback.domain.model.Comment;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 //응답 정보
@@ -28,5 +32,7 @@ public class ResultReturn {
         this.ok = null;
         this.results = null;
         this.msg = null;
+    }
+    public ResultReturn(boolean ok, CommentDto commentDto, List<Comment> commentList, String msg) {
     }
 }

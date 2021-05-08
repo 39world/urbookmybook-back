@@ -92,4 +92,14 @@ public class TownBookService {
         return townBookRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
+    //제목을기반으로 검색하기
+    @Transactional
+    public List<TownBook> search(String keyword){
+        List<TownBook> townBookList = townBookRepository.findByTitleContainingOrderByModifiedAtDesc(keyword);
+
+
+        return townBookList;
+    }
+
+
 }

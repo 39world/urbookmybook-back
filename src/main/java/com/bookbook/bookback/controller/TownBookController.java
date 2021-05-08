@@ -99,4 +99,12 @@ public class TownBookController {
         return townBookService.getAllBooks(page , size, sortBy, isAsc);
     }
 
+    //검색기능
+    @GetMapping("/api/search")
+    public List<TownBook> search(@RequestParam(value = "keyword")String keyword, Model model){
+        List<TownBook> searchList = townBookService.search(keyword);
+        model.addAttribute("searchList",searchList);
+        return townBookService.search(keyword);
+    }
+
 }

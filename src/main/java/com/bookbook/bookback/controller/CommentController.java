@@ -54,4 +54,15 @@ public class CommentController {
         return commentService.deleteComment(commentId, user);
     }
 
+    @GetMapping("/api/comments/{email}")
+    public ResultReturn getMyComment ( HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+        return commentService.getMyComment(user);
+    }
+
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +80,16 @@ public class CommentService {
             return new ResultReturn(true, "삭제가 완료되었습니다.");
         }
     }
+
+
+    public ResultReturn getMyComment(User user) {
+
+        List<Comment> commentList = commentRepository.findByUserEmail(user.getEmail());
+
+
+        return new ResultReturn(true ,commentList, "댓글 반환 성공!");
+    }
+
 
 
 }
