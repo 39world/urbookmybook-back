@@ -3,8 +3,12 @@ package com.bookbook.bookback.domain.dto;
 import com.bookbook.bookback.domain.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.data.repository.NoRepositoryBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -17,6 +21,7 @@ public class UserDto {
     private String comment;
     private Double star;
     private String token;
+    private List<String> interested;
 
     //간단한 유저 정보 Dto 생성. 유저 정보 제공용
     public UserDto(String token, User user){
@@ -27,6 +32,7 @@ public class UserDto {
         this.town = user.getTown();
         this.comment = user.getComment();
         this.star = user.getStar();
+        this.interested = user.getInterested();
         this.token = token;
     }
 
@@ -47,15 +53,34 @@ public class UserDto {
         public UserDto(User user, JSONObject userJson){
         this.id = user.getId();
         this.email = user.getEmail();
-        this.username = userJson.getString("username");
-        if(userJson.getString("image")==null){
+        if(userJson.isNull("username")){
+                this.username = user.getUsername();
+        } else{
+                this.username = userJson.getString("username");
+        }
+        if(userJson.isNull("image")){
             this.image = user.getImage();
         } else{
             this.image = userJson.getString("image");
         }
-        this.image = user.getImage();
-        this.town = userJson.getString("town");
-        this.comment = userJson.getString("comment");
+        if(userJson.isNull("town")){
+            this.town = user.getTown();
+        } else{
+            this.town = userJson.getString("town");
+        }
+        if(userJson.isNull("comment")){
+            this.comment = user.getComment();
+        } else{
+            this.comment = userJson.getString("comment");
+        }
+        if(userJson.isNull("interested")){
+            this.interested = new ArrayList<>();
+        } else {
+            this.interested = new ArrayList<>();
+            JSONArray interest_array = userJson.getJSONArray("interested");
+            for(int i = 0; i < interest_array.length() ; i++){
+                this.interested.add(interest_array.getString(i));
+            }
+            }
     }
-
 }

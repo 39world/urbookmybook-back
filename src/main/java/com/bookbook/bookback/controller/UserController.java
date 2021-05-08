@@ -77,7 +77,7 @@ public class UserController {
         //해당 사용자의 프로필 업데이트
         UserDto userDto = new UserDto(member,userJson);
         userService.update(userDto);
-        return new ResultReturn(true, userDto,"이미지 파일 등록 완료.");
+        return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
 //    //프로필 사진 등록 api
 //    //등록된 사진의 url을 반환

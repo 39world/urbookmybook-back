@@ -7,11 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Builder
 @Data
@@ -26,6 +24,8 @@ public class User {
     private String password;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
+    @ElementCollection
+    private List<String> interested; // 빈 배열
 
     private String image;
     private String town;
@@ -63,5 +63,6 @@ public class User {
         this.image = userDto.getImage();
         this.town = userDto.getTown();
         this.comment = userDto.getComment();
+        this.interested= userDto.getInterested();
     }
 }
