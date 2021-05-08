@@ -84,7 +84,7 @@ public class TownBookService {
 
     }
 
-    public ResultReturn getAllBooks(User user, int page, int size, String sortBy, boolean isAsc) {
+    public ResultReturn getTownBooks(User user, int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);

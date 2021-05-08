@@ -30,12 +30,28 @@ public class TownBookController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final FileUploadService fileUploadService;
+
     //동네책장 전체 조회
-//    @GetMapping("/api/townbooks")
-//    public ResultReturn getTownBooks(){
-//
-//        return townBookService.getTownBooks();
-//    }
+    @GetMapping("/api/townbooks")
+    public ResultReturn getAllBooks(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc
+    ) {
+
+//                String token = jwtTokenProvider.resolveToken(httpServletRequest);
+//        String email = jwtTokenProvider.getUserPk(token);
+//        User user = userRepository.findByEmail(email).orElseThrow(
+//                ()->new IllegalArgumentException("존재하지 않습니다.")
+//        );
+        User user =userRepository.findById(1L).orElseThrow(
+                ()->new IllegalArgumentException("존재하지 않습니다.")
+        );
+
+        page = page - 1;
+        return townBookService.getTownBooks(user, page , size, sortBy, isAsc);
+    }
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
@@ -88,27 +104,7 @@ public class TownBookController {
         return townBookService.detailTownBook(townBookId);
     }
 
-    //동네책장 전체 조회
-    @GetMapping("/api/townbooks/page")
-    public ResultReturn getAllBooks(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("sortBy") String sortBy,
-            @RequestParam("isAsc") boolean isAsc
-    ) {
 
-        //        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-//        String email = jwtTokenProvider.getUserPk(token);
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                ()->new IllegalArgumentException("존재하지 않습니다.")
-//        );
-        User user =userRepository.findById(1L).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
-        );
-
-        page = page - 1;
-        return townBookService.getAllBooks(user, page , size, sortBy, isAsc);
-    }
 
     //검색기능
     @GetMapping("/api/search")

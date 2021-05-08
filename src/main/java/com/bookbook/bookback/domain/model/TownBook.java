@@ -60,7 +60,7 @@ public class TownBook extends Timestamped {
     @Column(name="publisher", nullable=true)
     private String publisher;
 
-    @Column(name="contentInfo", nullable=true)
+    @Column(columnDefinition = "TEXT", name="contentInfo", nullable=true)
     private String contentInfo;
 
     @Column(name="web_url", nullable=true)
