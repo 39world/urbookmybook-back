@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
 
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class UserController {
 
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정
     @RequestMapping("/api/usercheck")
-    public UserDto userInfo(HttpServletRequest httpServletRequest) {
+    public ResultReturn userInfo(HttpServletRequest httpServletRequest) {
     /*
     HTTP Request의 Header로 넘어온 token을 쪼개어 누구인지 나타내주는 과정
      */
@@ -39,7 +40,8 @@ public class UserController {
         String email = jwtTokenProvider.getUserPk(token);
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-        return new UserDto(token,member);
+        UserDto userDto = new UserDto(token, member);
+        return new ResultReturn(true, userDto,"프로필 조회 완료");
     }
 
     //프로필 수정  multipart date-form 데이터를 받아 수정 진행
@@ -64,6 +66,7 @@ public class UserController {
 //            return userDto;
 //        }
 //    }
+
 
 //    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
     @RequestMapping("/api/profile")
