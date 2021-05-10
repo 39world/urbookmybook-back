@@ -3,6 +3,7 @@ package com.bookbook.bookback.service;
 
 import com.bookbook.bookback.controllerReturn.DetailReturn;
 import com.bookbook.bookback.controllerReturn.ResultReturn;
+import com.bookbook.bookback.domain.dto.PartCommentDto;
 import com.bookbook.bookback.domain.dto.TownBookDto;
 import com.bookbook.bookback.domain.model.Comment;
 import com.bookbook.bookback.domain.model.TownBook;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class TownBookService {
 
     public ResultReturn createTownBook(User user,TownBookDto townBookDto){
         townBookDto.setUser(user);
+        townBookDto.setTown(user.getTown());
         TownBook townBook = new TownBook(townBookDto);
         townBookRepository.save(townBook);
         return new ResultReturn(true, "동네책방 등록 성공!");
@@ -79,21 +82,44 @@ public class TownBookService {
         TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
                 ()-> new IllegalArgumentException("책이 존재하지 않습니다")
         );
+        List<PartCommentDto> partComments = new ArrayList<PartCommentDto>();
         List<Comment> comments = commentRepository.findByTownBookId(townBookId);
-        return new DetailReturn(true, townBook, comments, "상세 정보 반환을 성공했습니다.");
+        for(Comment comment : comments){
+            Long commentId= comment.getId();
+            String username= comment.getUsername();
+            String contents= comment.getContents();
+            String image = comment.getUser().getImage();
+
+            String email=comment.getUser().getEmail();
+            Long userId=comment.getUser().getId();
+
+            partComments.add(new PartCommentDto(commentId,username,contents, image, email, userId));
+        }
+
+        return new DetailReturn(true, townBook, partComments, "상세 정보 반환을 성공했습니다.");
 
     }
 
-    public ResultReturn getTownBooks(User user, int page, int size, String sortBy, boolean isAsc) {
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<TownBook> townBookList= townBookRepository.findByTownOrderByCreatedAtDesc(user.getTown(), pageable);
+//    public ResultReturn getTownBooks(User user, int page, int size, String sortBy, boolean isAsc) {
+//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+//        Sort sort = Sort.by(direction, sortBy);
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//        Page<TownBook> townBookList= townBookRepository.findByTownOrderByCreatedAtDesc(user.getTown(), pageable);
+//
+//        if(townBookList.isEmpty())
+//            return new ResultReturn(false, "등록된 책이 없습니다.");
+//        else
+//            return new ResultReturn(true, townBookList, "동네책장 반환을 완료했습니다.");
+//    }
 
-        if(townBookList.isEmpty())
+    public ResultReturn getTownBooks(){
+        List<TownBook> townBookList= townBookRepository.findAll();
+        if(townBookList.isEmpty()){
             return new ResultReturn(false, "등록된 책이 없습니다.");
+        }
         else
-            return new ResultReturn(true, townBookList, "동네책장 반환을 완료했습니다.");
+            return new ResultReturn(true, townBookList, "반환 완료");
+
     }
 
     //제목을기반으로 검색하기

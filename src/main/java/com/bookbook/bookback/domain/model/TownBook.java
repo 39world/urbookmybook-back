@@ -81,7 +81,7 @@ public class TownBook extends Timestamped {
         this.town=townBookDto.getTown();
         this.publisher=townBookDto.getPublisher();
         this.contentInfo=townBookDto.getContentInfo();
-        this.webUrl=townBookDto.getContentInfo();
+        this.webUrl=townBookDto.getWebUrl();
         this.user = townBookDto.getUser();
     }
 
@@ -97,7 +97,7 @@ public class TownBook extends Timestamped {
         this.town=townBookDto.getTown();
         this.publisher=townBookDto.getPublisher();
         this.contentInfo=townBookDto.getContentInfo();
-        this.webUrl=townBookDto.getContentInfo();
+        this.webUrl=townBookDto.getWebUrl();
 
     }
 

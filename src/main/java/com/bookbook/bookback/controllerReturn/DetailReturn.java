@@ -1,5 +1,6 @@
 package com.bookbook.bookback.controllerReturn;
 
+import com.bookbook.bookback.domain.dto.PartCommentDto;
 import com.bookbook.bookback.domain.model.Comment;
 import com.bookbook.bookback.domain.model.TownBook;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,7 +16,7 @@ public class DetailReturn {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private TownBook townBook;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Comment> comments;
+    private List<PartCommentDto> comments;
     private String msg;
 
     public DetailReturn(Boolean ok, String msg){
@@ -23,7 +24,7 @@ public class DetailReturn {
         this.msg=msg;
     }
 
-    public DetailReturn(Boolean ok, TownBook townBook, List<Comment> comments, String msg){
+    public DetailReturn(Boolean ok, TownBook townBook, List<PartCommentDto> comments, String msg){
         this.ok = ok;
         this.townBook=townBook;
         this.comments=comments;

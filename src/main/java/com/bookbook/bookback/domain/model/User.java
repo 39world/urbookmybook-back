@@ -24,8 +24,6 @@ public class User {
     private String password;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
-    @ElementCollection
-    private List<String> interested; // 빈 배열
 
     private String image;
     private String town;
@@ -63,6 +61,5 @@ public class User {
         this.image = userDto.getImage();
         this.town = userDto.getTown();
         this.comment = userDto.getComment();
-        this.interested= userDto.getInterested();
     }
 }

@@ -26,16 +26,19 @@ public class Comment extends Timestamped {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name="town_book_id", nullable=false)
-    private TownBook townBook;
+//    @ManyToOne
+//    @JoinColumn(name="town_book_id", nullable=false)
+//    private TownBook townBook;
+
+    @Column(name="town_book_id", nullable=false)
+    private Long townBookId;
 
 
     public Comment(CommentDto commentDto){
         this.username=commentDto.getUser().getUsername();
         this.contents=commentDto.getContents();
         this.user=commentDto.getUser();
-        this.townBook=commentDto.getTownBook();
+        this.townBookId=commentDto.getTownBook().getId();
     }
     public void update(CommentDto commentDto){
         this.contents=commentDto.getContents();

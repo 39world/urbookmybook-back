@@ -34,41 +34,45 @@ public class TownBookController {
     private final FileUploadService fileUploadService;
 
     //동네책장 전체 조회
-    @GetMapping("/api/townbooks")
-    public ResultReturn getAllBooks(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("sortBy") String sortBy,
-            @RequestParam("isAsc") boolean isAsc
-    ) {
-
+//    @GetMapping("/api/townbooks")
+//    public ResultReturn getAllBooks(
+//            @RequestParam("page") int page,
+//            @RequestParam("size") int size,
+//            @RequestParam("sortBy") String sortBy,
+//            @RequestParam("isAsc") boolean isAsc,
+//            HttpServletRequest httpServletRequest
+//
+//    ) {
+//
 //                String token = jwtTokenProvider.resolveToken(httpServletRequest);
 //        String email = jwtTokenProvider.getUserPk(token);
 //        User user = userRepository.findByEmail(email).orElseThrow(
 //                ()->new IllegalArgumentException("존재하지 않습니다.")
 //        );
-        User user =userRepository.findById(1L).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
-        );
+//
+//        page = page - 1;
+//        return townBookService.getTownBooks(user, page , size, sortBy, isAsc);
+//    }
 
-        page = page - 1;
-        return townBookService.getTownBooks(user, page , size, sortBy, isAsc);
+    @GetMapping("/api/townbooks")
+    public ResultReturn getAllBooks(){
+        return townBookService.getTownBooks();
+
     }
-
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto) {
-//        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-//        String email = jwtTokenProvider.getUserPk(token);
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                ()->new IllegalArgumentException("존재하지 않습니다.")
-//        );
-        System.out.println("이미지: " + townBookDto.getImage());
-
-        User user =userRepository.findById(1L).orElseThrow(
+    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest) {
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
+        System.out.println("이미지: " + townBookDto.getImage());
 
+//        User user =userRepository.findById(1L).orElseThrow(
+//                ()->new IllegalArgumentException("존재하지 않습니다.")
+//        );
+//
 
         if(townBookDto==null){
             return new ResultReturn(false, "Dto가 존재하지 않습니다");
@@ -109,7 +113,7 @@ public class TownBookController {
 
 
     //검색기능
-    @GetMapping("/api/search")
+    @GetMapping("/api/townbooks/search")
     public List<TownBook> search(@RequestParam(value = "keyword")String keyword, Model model){
         List<TownBook> searchList = townBookService.search(keyword);
         model.addAttribute("searchList",searchList);
@@ -123,5 +127,6 @@ public class TownBookController {
         return townBookService.searchByCategory(category);
 
     }
+
 
 }

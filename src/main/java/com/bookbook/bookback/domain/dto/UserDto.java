@@ -21,7 +21,6 @@ public class UserDto {
     private String comment;
     private Double star;
     private String token;
-    private List<String> interested;
 
     //간단한 유저 정보 Dto 생성. 유저 정보 제공용
     public UserDto(String token, User user){
@@ -32,7 +31,6 @@ public class UserDto {
         this.town = user.getTown();
         this.comment = user.getComment();
         this.star = user.getStar();
-        this.interested = user.getInterested();
         this.token = token;
     }
 
@@ -73,14 +71,5 @@ public class UserDto {
         } else{
             this.comment = userJson.getString("comment");
         }
-        if(userJson.isNull("interested")){
-            this.interested = new ArrayList<>();
-        } else {
-            this.interested = new ArrayList<>();
-            JSONArray interest_array = userJson.getJSONArray("interested");
-            for(int i = 0; i < interest_array.length() ; i++){
-                this.interested.add(interest_array.getString(i));
-            }
-            }
     }
 }
