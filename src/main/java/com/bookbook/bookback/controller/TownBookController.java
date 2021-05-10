@@ -12,6 +12,8 @@ import com.bookbook.bookback.service.TownBookService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -112,6 +114,14 @@ public class TownBookController {
         List<TownBook> searchList = townBookService.search(keyword);
         model.addAttribute("searchList",searchList);
         return townBookService.search(keyword);
+    }
+
+     //카테고리 별 책 검색
+    @PostMapping("/api/townbooks/category")
+    public ResultReturn searchByCategory(@RequestBody String category){
+
+        return townBookService.searchByCategory(category);
+
     }
 
 }

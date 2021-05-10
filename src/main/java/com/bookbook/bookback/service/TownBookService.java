@@ -93,16 +93,25 @@ public class TownBookService {
         if(townBookList.isEmpty())
             return new ResultReturn(false, "등록된 책이 없습니다.");
         else
-            return new ResultReturn(true, townBookList, "동네책장 전체 반환을 성공했습니다.");
+            return new ResultReturn(true, townBookList, "동네책장 반환을 완료했습니다.");
     }
 
     //제목을기반으로 검색하기
-    @Transactional
     public List<TownBook> search(String keyword){
         List<TownBook> townBookList = townBookRepository.findByTitleContainingOrderByModifiedAtDesc(keyword);
 
 
         return townBookList;
+    }
+
+    //카테고리별 검색하기
+    public ResultReturn searchByCategory(String category){
+        List <TownBook> books= townBookRepository.findByCategoryContainingOrderByModifiedAtDesc(category);
+        if(books.isEmpty())
+            return new ResultReturn(false, "등록된 책이 없습니다.");
+        else
+            return new ResultReturn(true, books, "카테고리 별 동네책장 반환을 완료했습니다.");
+
     }
 
 
