@@ -65,6 +65,10 @@ public class TownBook extends Timestamped {
     @Column(name="web_url", nullable=true)
     private String webUrl;
 
+    @Column(name="views", nullable=true)
+    private Integer views;
+
+
     public TownBook(TownBookDto townBookDto){
         this.username=townBookDto.getUser().getUsername();
         this.title=townBookDto.getTitle();
@@ -79,7 +83,9 @@ public class TownBook extends Timestamped {
         this.publisher=townBookDto.getPublisher();
         this.contentInfo=townBookDto.getContentInfo();
         this.webUrl=townBookDto.getWebUrl();
+        this.views=townBookDto.getViews();
         this.user = townBookDto.getUser();
+
     }
 
     public void update(TownBookDto townBookDto){
@@ -95,6 +101,7 @@ public class TownBook extends Timestamped {
         this.publisher=townBookDto.getPublisher();
         this.contentInfo=townBookDto.getContentInfo();
         this.webUrl=townBookDto.getWebUrl();
+        this.views= townBookDto.getViews();
 
     }
 
