@@ -110,9 +110,7 @@ public class TownBookController {
 
     //검색기능
     @GetMapping("/api/townbooks/search")
-    public List<TownBook> search(@RequestParam(value = "keyword")String keyword, Model model){
-        List<TownBook> searchList = townBookService.search(keyword);
-        model.addAttribute("searchList",searchList);
+    public List<TownBook> search(@RequestParam(value = "keyword")String keyword){
         return townBookService.search(keyword);
     }
 
