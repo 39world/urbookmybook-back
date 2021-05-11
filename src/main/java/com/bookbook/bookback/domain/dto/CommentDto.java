@@ -14,5 +14,5 @@ public class CommentDto {
 
     private User user;
 
-    private TownBook townBook;
+    private Long townBookId;
 }

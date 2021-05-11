@@ -5,11 +5,13 @@ import com.bookbook.bookback.domain.dto.CommentDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Comment extends Timestamped {
     @Id
@@ -23,10 +25,10 @@ public class Comment extends Timestamped {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_id")
     private User user;
 
-//    @ManyToOne
+//    @ManyToOne(fetch=FetchType.LAZY)
 //    @JoinColumn(name="town_book_id", nullable=false)
 //    private TownBook townBook;
 
@@ -38,7 +40,7 @@ public class Comment extends Timestamped {
         this.username=commentDto.getUser().getUsername();
         this.contents=commentDto.getContents();
         this.user=commentDto.getUser();
-        this.townBookId=commentDto.getTownBook().getId();
+        this.townBookId=commentDto.getTownBookId();
     }
     public void update(CommentDto commentDto){
         this.contents=commentDto.getContents();

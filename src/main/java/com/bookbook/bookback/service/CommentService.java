@@ -27,12 +27,13 @@ public class CommentService {
             return new ResultReturn(false, "로그인이 필요한 서비스입니다.");
         }
 
-        TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
-                ()->new IllegalArgumentException("책이 존재하지 않습니다.")
-        );
-        commentDto.setTownBook(townBook);
+//        TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
+//                ()->new IllegalArgumentException("책이 존재하지 않습니다.")
+//        );
+        commentDto.setTownBookId(townBookId);
         commentDto.setUser(user);
         Comment comment=new Comment(commentDto);
+//        townBook.add(comment);
         commentRepository.save(comment);
         return new ResultReturn(true, "댓글 작성이 완료되었습니다.");
 

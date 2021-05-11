@@ -65,6 +65,7 @@ public class TownBookService {
     }
 
     //등록한 책 삭제
+    @Transactional
     public ResultReturn deleteTownBook(Long townBookId,User user){
         TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
                 () -> new IllegalArgumentException("책이 존재하지 않습니다.")
@@ -73,6 +74,7 @@ public class TownBookService {
             return new ResultReturn(false,"삭제는 작성자 본인만 가능합니다.");
         }
         else{
+            commentRepository.deleteByTownBookId(townBookId);
             townBookRepository.deleteById(townBookId);
             return new ResultReturn(true,"삭제가 완료되었습니다.");
         }

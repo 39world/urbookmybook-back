@@ -8,6 +8,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -24,11 +25,9 @@ public class TownBook extends Timestamped {
     @Column(name = "username", nullable = true)
     private String username;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
 
     @Column(name = "title", nullable = true)
     private String title;
@@ -65,8 +64,6 @@ public class TownBook extends Timestamped {
 
     @Column(name="web_url", nullable=true)
     private String webUrl;
-
-
 
     public TownBook(TownBookDto townBookDto){
         this.username=townBookDto.getUser().getUsername();
