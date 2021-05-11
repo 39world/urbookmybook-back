@@ -35,16 +35,12 @@ public class TownBookController {
 
 //    동네책장 전체 조회
     @GetMapping("/api/townbooks")
-    public ResultReturn getAllBooks(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("sortBy") String sortBy,
-            @RequestParam("isAsc") boolean isAsc,
-            HttpServletRequest httpServletRequest
+    public ResultReturn getAllBooks( @RequestParam("page") int page, HttpServletRequest httpServletRequest) {
 
-    ) {
-
-                String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        int size=10;
+        String sortBy="CreatedAt";
+        boolean isAsc= false;
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
