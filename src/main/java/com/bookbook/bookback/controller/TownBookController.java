@@ -63,7 +63,6 @@ public class TownBookController {
         User user = userRepository.findByEmail(email).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
-        System.out.println("이미지: " + townBookDto.getImage());
 
 //        User user =userRepository.findById(1L).orElseThrow(
 //                ()->new IllegalArgumentException("존재하지 않습니다.")

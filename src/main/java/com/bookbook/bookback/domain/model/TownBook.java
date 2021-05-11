@@ -97,12 +97,9 @@ public class TownBook extends Timestamped {
         this.description =townBookDto.getDescription();
         this.status = townBookDto.getStatus();
         this.price = townBookDto.getPrice();
-        this.town=townBookDto.getTown();
         this.publisher=townBookDto.getPublisher();
         this.contentInfo=townBookDto.getContentInfo();
         this.webUrl=townBookDto.getWebUrl();
-        this.views= townBookDto.getViews();
-
     }
 
 

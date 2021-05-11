@@ -47,10 +47,15 @@ public class TownBookService {
         if(user==null)
             return new ResultReturn(false, "로그인이 필요한 서비스입니다.");
 
+        if(townBookDto.getCaptureImages() == null){
+            townBookDto.setCaptureImages(townBook.getCaptureImages());
+        }
         if(!townBook.getUser().getId().equals(user.getId())){
             return new ResultReturn(false,"수정은 작성자 본인만 가능합니다.");
         }
+
         else{
+            townBook.setTown(user.getTown());
             townBook.update(townBookDto);
             return new ResultReturn(true,"수정이 완료되었습니다.");
         }
