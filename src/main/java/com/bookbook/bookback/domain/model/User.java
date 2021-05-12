@@ -21,7 +21,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String password;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
 
@@ -59,6 +58,7 @@ public class User {
         this.email = userDto.getEmail();
         this.username = userDto.getUsername();
         this.image = userDto.getImage();
+        this.point = 0L;
     }
 
     public void update(UserDto userDto){

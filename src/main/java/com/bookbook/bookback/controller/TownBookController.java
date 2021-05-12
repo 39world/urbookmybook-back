@@ -136,10 +136,10 @@ public class TownBookController {
     @PutMapping("/api/townbooks/finish/{townBookId}")
     public ResultReturn finishTownBook(@PathVariable Long townBookId, @RequestBody String userData){
         JSONObject userInfo = new JSONObject(userData);
-        User masterUser = userRepository.findById(userInfo.getLong("masterUser")).orElseThrow(
+        User masterUser = userRepository.findById(userInfo.getLong("masterUserId")).orElseThrow(
                 ()->new IllegalArgumentException("master 유저가 존재하지 않습니다.")
         );
-        User otherUser = userRepository.findById(userInfo.getLong("otherUser")).orElseThrow(
+        User otherUser = userRepository.findById(userInfo.getLong("otherUserId")).orElseThrow(
                 ()->new IllegalArgumentException("other 유저가 존재하지 않습니다.")
         );
         return townBookService.finishTownBook(townBookId,masterUser,otherUser);
