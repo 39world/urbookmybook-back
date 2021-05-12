@@ -54,7 +54,7 @@ public class CommentController {
         return commentService.deleteComment(commentId, user);
     }
 
-    @GetMapping("/api/comments")
+    @GetMapping("/api/user/comments")
     public ResultReturn getMyComment ( HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);

@@ -82,7 +82,7 @@ public class TownBookService {
         }
     }
 
-    @Transactional
+    //상세 정보 조회
     public DetailReturn detailTownBook(Long townBookId){
         TownBook townBook = townBookRepository.findById(townBookId).orElseThrow(
                 ()-> new IllegalArgumentException("책이 존재하지 않습니다")
@@ -111,6 +111,7 @@ public class TownBookService {
 
     }
 
+    //페이지 처리
     public ResultReturn getTownBooks(User user, int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
@@ -150,10 +151,10 @@ public class TownBookService {
 
     }
 
-    //ㄴㅐ가쓴글(?)
-    public ResultReturn getMyTownBook(User user) {
+    //내가 등록한 게시글 리스트 조회
+    public ResultReturn getMyTownBooks(User user) {
 
-        List<TownBook> townBookList = townBookRepository.findByUserEmail(user.getEmail());
+        List<TownBook> townBookList = townBookRepository.findByUser(user);
 
 
         return new ResultReturn(true ,townBookList, "댓글 반환 성공!");

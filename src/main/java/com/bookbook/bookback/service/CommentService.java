@@ -85,7 +85,7 @@ public class CommentService {
 
     public ResultReturn getMyComment(User user) {
 
-        List<Comment> commentList = commentRepository.findByUserEmail(user.getEmail());
+        List<Comment> commentList = commentRepository.findByUser(user);
 
 
         return new ResultReturn(true ,commentList, "댓글 반환 성공!");

@@ -2,6 +2,7 @@ package com.bookbook.bookback.domain.repository;
 
 import com.bookbook.bookback.domain.model.Comment;
 import com.bookbook.bookback.domain.model.TownBook;
+import com.bookbook.bookback.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,6 @@ public interface TownBookRepository extends JpaRepository<TownBook,Long> {
 
     List <TownBook> findByCategoryContainingOrderByModifiedAtDesc(String category);
 
-    List<TownBook> findByUserEmail(String Email);
+    List<TownBook> findByUser(User user);
 
 }
