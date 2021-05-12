@@ -60,7 +60,6 @@ public class User {
         this.email = userDto.getEmail();
         this.username = userDto.getUsername();
         this.image = userDto.getImage();
-        this.point = 0L;
     }
 
     public void update(UserDto userDto){

@@ -101,6 +101,17 @@ public class UserController {
         }
     }
 
+    // 기능 테스트용 자체 회원가입, 로그인
+    @PostMapping("/api/signup")
+    public Long join(@RequestBody Map<String, String> user) {
+        return userRepository.save(User.builder( )
+                .email(user.get("email"))
+                .password(passwordEncoder.encode(user.get("password")))
+                .username(user.get("username"))
+                .role("ROLE_USER")
+                .build()).getId();
+    }
+
     //google social login test code
     @PostMapping("/api/login")
     public ResultReturn loginUser(@RequestBody UserDto userDto ) {
@@ -118,6 +129,24 @@ public class UserController {
             return new ResultReturn(true, token, "로그인이 되었습니다.");
         }
     }
+
+        @PostMapping("/api/test")
+        public void test1(@RequestPart(required = false) String data, @RequestParam( required = false) MultipartFile file){
+            System.out.println(data);
+            System.out.println(file);
+//            String fileUrl = fileUploadService.uploadImage(file);
+//            System.out.println(fileUrl);
+        }
+
+        @GetMapping("/api/test")
+        public User test2(){
+        User user = User.builder( )
+                .email("test")
+                .username("test2")
+                .role("ROLE_USER")
+                .build();
+        return user;
+        }
 
     //내가 등록한 게시글 조회
     @GetMapping("/api/users/townbooks")
@@ -164,6 +193,26 @@ public class UserController {
 
         return userService.deleteMyScrapList(townBookId, user);
     }
+
+
+
+//        User user = userRepository.findByEmail(userDto.getEmail())
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+//
+//        return userDto;
+//    }
+//    @PostMapping("/api/login")
+//    public UserDto login(@RequestBody Map<String, String> user) {
+//        User member = userRepository.findByEmail(user.get("email"))
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+//
+//        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//        }
+//        String token = jwtTokenProvider.createToken(member.getEmail());
+//        UserDto userDto = new UserDto(token,member);
+//        return userDto;
+//    }
 
 
 }
