@@ -24,7 +24,6 @@ public class User {
     private String password;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
-    private String password;
     private String image;
     private String town;
 //    private String address;
