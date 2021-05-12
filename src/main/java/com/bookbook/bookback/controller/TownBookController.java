@@ -131,4 +131,19 @@ public class TownBookController {
         );
         return townBookService.putToMyWishList(townBookId, user);
     }
+
+    //교환 완료 처리
+    @PostMapping("/api/townbooks/finish")
+    public ResultReturn finishTownBook(@PathVariable Long townBookId, @RequestBody String userData){
+        JSONObject userInfo = new JSONObject(userData);
+        User masterUser = userRepository.findById(userInfo.getLong("masterUser")).orElseThrow(
+                ()->new IllegalArgumentException("master 유저가 존재하지 않습니다.")
+        );
+        User otherUser = userRepository.findById(userInfo.getLong("otherUser")).orElseThrow(
+                ()->new IllegalArgumentException("other 유저가 존재하지 않습니다.")
+        );
+        return townBookService.finishTownBook(townBookId,masterUser,otherUser);
+
+    }
+
 }

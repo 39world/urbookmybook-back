@@ -22,6 +22,7 @@ public class UserDto {
     private Double star;
     private String token;
     private List<Long> wishList;
+    private Long point;
 
     //간단한 유저 정보 Dto 생성. 유저 정보 제공용
     public UserDto(String token, User user){
@@ -33,6 +34,7 @@ public class UserDto {
         this.comment = user.getComment();
         this.star = user.getStar();
         this.wishList=user.getWishList();
+        this.point = user.getPoint();
         this.token = token;
 
     }
