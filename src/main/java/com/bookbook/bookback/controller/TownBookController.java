@@ -133,7 +133,7 @@ public class TownBookController {
     }
 
     //교환 완료 처리
-    @PostMapping("/api/townbooks/finish")
+    @PutMapping("/api/townbooks/finish")
     public ResultReturn finishTownBook(@PathVariable Long townBookId, @RequestBody String userData){
         JSONObject userInfo = new JSONObject(userData);
         User masterUser = userRepository.findById(userInfo.getLong("masterUser")).orElseThrow(
