@@ -26,7 +26,7 @@ public class CommentController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("전체 조회, 아이디가 존재하지 않습니다.")
         );
         return commentService.createComment(commentDto, townBookId, user);
 
@@ -38,7 +38,7 @@ public class CommentController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("댓글 수정, 아이디가 존재하지 않습니다.")
         );
         return commentService.updateComment(commentDto, commentId, user);
     }
@@ -49,7 +49,7 @@ public class CommentController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("댓글 삭제, 아이디가 존재하지 않습니다.")
         );
         return commentService.deleteComment(commentId, user);
     }

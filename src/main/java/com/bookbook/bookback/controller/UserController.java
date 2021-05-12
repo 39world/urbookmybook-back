@@ -165,5 +165,4 @@ public class UserController {
         return userService.deleteMyScrapList(townBookId, user);
     }
 
-
 }
