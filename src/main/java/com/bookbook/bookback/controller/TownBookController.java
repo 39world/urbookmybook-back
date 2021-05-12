@@ -120,6 +120,16 @@ public class TownBookController {
         return townBookService.searchByCategory(category);
 
     }
+    //내가쓴글??검색??
+    @GetMapping("/api/townbooks/myTownBook")
+    public ResultReturn getMyTownBook ( HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+        return townBookService.getMyTownBook(user);
+    }
 
 
 }
