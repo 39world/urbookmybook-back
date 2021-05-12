@@ -150,5 +150,14 @@ public class TownBookService {
 
     }
 
+    //ㄴㅐ가쓴글(?)
+    public ResultReturn getMyTownBook(User user) {
+
+        List<TownBook> townBookList = townBookRepository.findByUserEmail(user.getEmail());
+
+
+        return new ResultReturn(true ,townBookList, "댓글 반환 성공!");
+    }
+
 
 }
