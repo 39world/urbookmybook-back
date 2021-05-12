@@ -68,7 +68,7 @@ public class TownBook extends Timestamped {
     @Column(name="views", nullable=true)
     private Integer views;
 
-    @Column(nullable = true)
+    @Column(name = "finish", nullable = true)
     private  int finish = 0;
 
 
