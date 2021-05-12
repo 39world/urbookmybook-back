@@ -40,10 +40,10 @@ public class UserService {
     }
 
     @Transactional
-    public ResultReturn getMyWishList(User user){
-        List <TownBook> wishList= new ArrayList<>();
+    public ResultReturn getMyScrapList(User user){
+        List <TownBook> scrapList= new ArrayList<>();
         List <Long> deleteTownBookIdList= new ArrayList<>();
-        List<Long> townBookIdList= user.getWishList();
+        List<Long> townBookIdList= user.getScrapList();
         for(Long townBookId : townBookIdList){
             TownBook townBook = townBookRepository.findById(townBookId).orElse(
                     null
@@ -52,23 +52,23 @@ public class UserService {
                 deleteTownBookIdList.add(townBookId);
 
             else
-                wishList.add(townBook);
+                scrapList.add(townBook);
         }
 
         for(Long townBookId: deleteTownBookIdList){
             townBookIdList.remove(townBookId);
         }
 
-        if(wishList.isEmpty())
+        if(scrapList.isEmpty())
             return new ResultReturn(false, "관심 있는 책이 없습니다");
 
         else
-            return new ResultReturn(true, wishList, "관심 있는 책 리스트 반환 완료");
+            return new ResultReturn(true, scrapList, "관심 있는 책 리스트 반환 완료");
     }
 
     @Transactional
-    public ResultReturn deleteMyWishList(Long townBookId, User user){
-            List<Long> townBookIdList= user.getWishList();
+    public ResultReturn deleteMyScrapList(Long townBookId, User user){
+            List<Long> townBookIdList= user.getScrapList();
             if(townBookId==null)
                 return new ResultReturn(false, "책이 존재하지 않습니다.");
             else{

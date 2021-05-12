@@ -122,13 +122,13 @@ public class TownBookController {
     }
 
     //관심책 등록하기
-    @PostMapping("/api/townbooks/wishes/{townBookId}")
+    @PostMapping("/api/townbooks/scraps/{townBookId}")
     public ResultReturn putToMyWishList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 ()->new IllegalArgumentException("존재하지 않습니다.")
         );
-        return townBookService.putToMyWishList(townBookId, user);
+        return townBookService.putToMyScrapList(townBookId, user);
     }
 }

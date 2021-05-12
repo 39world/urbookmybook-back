@@ -163,9 +163,9 @@ public class TownBookService {
 
 
     @Transactional
-    public ResultReturn putToMyWishList(Long townBookId, User user){
-        user.getWishList().add(townBookId);
-        return new ResultReturn(true, "관심상품 등록 완료");
+    public ResultReturn putToMyScrapList(Long townBookId, User user){
+        user.getScrapList().add(townBookId);
+        return new ResultReturn(true, "관심책 스크랩 완료");
     }
 
 }

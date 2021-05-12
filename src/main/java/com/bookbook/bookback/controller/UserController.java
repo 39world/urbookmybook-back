@@ -171,27 +171,27 @@ public class UserController {
     }
 
     //관심 있는 책 리스트 조회
-    @GetMapping("/api/users/wishes")
-    public ResultReturn getMyWishList(HttpServletRequest httpServletRequest){
+    @GetMapping("/api/users/scraps")
+    public ResultReturn getMyScrapList(HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않습니다.")
         );
 
-        return userService.getMyWishList(user);
+        return userService.getMyScrapList(user);
     }
 
     //관심 있는 책 삭제
-    @DeleteMapping("/api/users/wishes/{townBookId}")
-    public ResultReturn deleteMyWishList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
+    @DeleteMapping("/api/users/scraps/{townBookId}")
+    public ResultReturn deleteMyScrapList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않습니다.")
         );
 
-        return userService.deleteMyWishList(townBookId, user);
+        return userService.deleteMyScrapList(townBookId, user);
     }
 
 
