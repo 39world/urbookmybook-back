@@ -109,8 +109,8 @@ public class TownBookController {
 
     //검색기능
     @GetMapping("/api/townbooks/search")
-    public List<TownBook> search(@RequestParam(value = "keyword")String keyword){
-        return townBookService.search(keyword);
+    public List<TownBook> searchByTitle(@RequestParam(value = "keyword")String keyword){
+        return townBookService.searchByTitle(keyword);
     }
 
      //카테고리 별 책 검색
@@ -120,16 +120,15 @@ public class TownBookController {
         return townBookService.searchByCategory(category);
 
     }
-    //내가 등록한 게시글 조회
-    @GetMapping("/api/user/townbooks")
-    public ResultReturn getMyTownBooks ( HttpServletRequest httpServletRequest){
+
+    //관심책 등록하기
+    @PostMapping("/api/townbooks/wishes/{townBookId}")
+    public ResultReturn putToMyWishList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("존재하지 않습니다.")
         );
-        return townBookService.getMyTownBooks(user);
+        return townBookService.putToMyWishList(townBookId, user);
     }
-
-
 }

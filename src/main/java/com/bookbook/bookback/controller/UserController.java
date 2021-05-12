@@ -3,9 +3,13 @@ package com.bookbook.bookback.controller;
 import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.controllerReturn.ResultReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
+import com.bookbook.bookback.domain.model.TownBook;
 import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.TownBookRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
+import com.bookbook.bookback.service.CommentService;
 import com.bookbook.bookback.service.FileUploadService;
+import com.bookbook.bookback.service.TownBookService;
 import com.bookbook.bookback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @Slf4j
@@ -28,6 +34,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final TownBookService townBookService;
+    private final CommentService commentService;
     private final FileUploadService fileUploadService;
 
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정
@@ -38,9 +46,9 @@ public class UserController {
      */
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
-        User member = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-        UserDto userDto = new UserDto(token, member);
+        UserDto userDto = new UserDto(token, user);
         return new ResultReturn(true, userDto,"프로필 조회 완료");
     }
 
@@ -140,7 +148,51 @@ public class UserController {
         return user;
         }
 
+    //내가 등록한 게시글 조회
+    @GetMapping("/api/users/townbooks")
+    public ResultReturn getMyTownBooks ( HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+        return townBookService.getMyTownBooks(user);
+    }
 
+    //내가 쓴 댓글 조회
+    @GetMapping("/api/users/comments")
+    public ResultReturn getMyComments (HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+        return commentService.getMyComments(user);
+    }
+
+    //관심 있는 책 리스트 조회
+    @GetMapping("/api/users/wishes")
+    public ResultReturn getMyWishList(HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+
+        return userService.getMyWishList(user);
+    }
+
+    //관심 있는 책 삭제
+    @DeleteMapping("/api/users/wishes/{townBookId}")
+    public ResultReturn deleteMyWishList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않습니다.")
+        );
+
+        return userService.deleteMyWishList(townBookId, user);
+    }
 
 
 

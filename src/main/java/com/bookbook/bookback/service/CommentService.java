@@ -33,7 +33,6 @@ public class CommentService {
         commentDto.setTownBookId(townBookId);
         commentDto.setUser(user);
         Comment comment=new Comment(commentDto);
-//        townBook.add(comment);
         commentRepository.save(comment);
         return new ResultReturn(true, "댓글 작성이 완료되었습니다.");
 
@@ -83,7 +82,8 @@ public class CommentService {
     }
 
 
-    public ResultReturn getMyComment(User user) {
+    //내가 쓴 댓글 조회
+    public ResultReturn getMyComments(User user) {
 
         List<Comment> commentList = commentRepository.findByUser(user);
 

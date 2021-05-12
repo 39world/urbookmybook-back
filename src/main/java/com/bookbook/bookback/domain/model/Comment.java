@@ -20,8 +20,8 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable= false)
-    private String username;
+//    @Column(nullable= false)
+//    private String username;
 
     @Column(columnDefinition = "TEXT",nullable=false)
     private String contents;
@@ -49,7 +49,7 @@ public class Comment extends Timestamped {
 
 
     public Comment(CommentDto commentDto){
-        this.username=commentDto.getUser().getUsername();
+//        this.username=commentDto.getUser().getUsername();
         this.contents=commentDto.getContents();
         this.user=commentDto.getUser();
         this.townBookId=commentDto.getTownBookId();

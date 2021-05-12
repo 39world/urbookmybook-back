@@ -10,6 +10,7 @@ import com.bookbook.bookback.domain.model.TownBook;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.CommentRepository;
 import com.bookbook.bookback.domain.repository.TownBookRepository;
+import com.bookbook.bookback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +28,7 @@ public class TownBookService {
 
     private final TownBookRepository townBookRepository;
     private final CommentRepository commentRepository;
-
+    private final UserRepository userRepository;
     //교환할 책 등록
     public ResultReturn createTownBook(User user,TownBookDto townBookDto){
         townBookDto.setUser(user);
@@ -97,7 +98,7 @@ public class TownBookService {
         List<Comment> comments = commentRepository.findByTownBookId(townBookId);
         for(Comment comment : comments){
             Long commentId= comment.getId();
-            String username= comment.getUsername();
+            String username= comment.getUser().getUsername();
             String contents= comment.getContents();
             String image = comment.getUser().getImage();
 
@@ -134,7 +135,7 @@ public class TownBookService {
 //    }
 
     //제목을기반으로 검색하기
-    public List<TownBook> search(String keyword){
+    public List<TownBook> searchByTitle(String keyword){
         List<TownBook> townBookList = townBookRepository.findByTitleContainingOrderByModifiedAtDesc(keyword);
 
 
@@ -160,5 +161,11 @@ public class TownBookService {
         return new ResultReturn(true ,townBookList, "댓글 반환 성공!");
     }
 
+
+    @Transactional
+    public ResultReturn putToMyWishList(Long townBookId, User user){
+        user.getWishList().add(townBookId);
+        return new ResultReturn(true, "관심상품 등록 완료");
+    }
 
 }

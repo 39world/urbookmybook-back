@@ -31,6 +31,11 @@ public class User {
     private String comment;
     private String myBook; //추후 구체적으로 수정 필요 ex) JSON or List<String> or List<int>
     private Double star;  //별점 업데이트 추가 필요. 업데이트 시점, 평점 내는 로직 구현
+
+
+    @ElementCollection
+    private List<Long> wishList;
+
     // OAuth를 위해 구성한 추가 필드 2개
     private String provider;
     private String providerId;
