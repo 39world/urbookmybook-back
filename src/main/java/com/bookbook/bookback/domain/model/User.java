@@ -23,7 +23,7 @@ public class User {
     private String username;
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
-
+    private String password;
     private String image;
     private String town;
 //    private String address;
@@ -59,6 +59,7 @@ public class User {
         this.email = userDto.getEmail();
         this.username = userDto.getUsername();
         this.image = userDto.getImage();
+        this.point = 0L;
     }
 
     public void update(UserDto userDto){
