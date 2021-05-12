@@ -47,7 +47,7 @@ public class UserController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("유저체크, 일치하는 E-MAIL이 없습니다"));
         UserDto userDto = new UserDto(token, user);
         return new ResultReturn(true, userDto,"프로필 조회 완료");
     }
@@ -125,7 +125,7 @@ public class UserController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("내가 쓴 게시글 조회, 아이디가 존재하지 않습니다.")
         );
         return townBookService.getMyTownBooks(user);
     }
@@ -136,7 +136,7 @@ public class UserController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("내 댓글 조회, 아이디가 존재하지 않습니다.")
         );
         return commentService.getMyComments(user);
     }
@@ -147,7 +147,7 @@ public class UserController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("스크랩 조회, 아이디가 존재하지 않습니다.")
         );
 
         return userService.getMyScrapList(user);
@@ -159,7 +159,7 @@ public class UserController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않습니다.")
+                () -> new IllegalArgumentException("스크랩 삭제, 아이디가 존재하지 않습니다.")
         );
 
         return userService.deleteMyScrapList(townBookId, user);

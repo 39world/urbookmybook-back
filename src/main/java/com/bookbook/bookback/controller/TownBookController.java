@@ -43,7 +43,7 @@ public class TownBookController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("전체 조회, 아이디가 존재하지 않습니다.")
         );
 
         page = page - 1;
@@ -61,7 +61,7 @@ public class TownBookController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("책 등록, 아이디가 존재하지 않습니다.")
         );
 
 //        User user =userRepository.findById(1L).orElseThrow(
@@ -82,7 +82,7 @@ public class TownBookController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("책 정보 수정, 아이디가 존재하지 않습니다.")
         );
         return townBookService.updateTownBook(townBookId,townBookDto, user);
     }
@@ -93,7 +93,7 @@ public class TownBookController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("책 삭제, 아이디가 존재하지 않습니다.")
         );
         return townBookService.deleteTownBook(townBookId, user);
     }
@@ -127,7 +127,7 @@ public class TownBookController {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("존재하지 않습니다.")
+                ()->new IllegalArgumentException("스크랩 등록, 아이디가 존재하지 않습니다.")
         );
         return townBookService.putToMyScrapList(townBookId, user);
     }
