@@ -19,8 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -166,6 +168,20 @@ public class TownBookService {
     public ResultReturn putToMyScrapList(Long townBookId, User user){
         user.getScrapList().add(townBookId);
         return new ResultReturn(true, "관심책 스크랩 완료");
+    }
+
+    //교환 완료 처리
+    @Transactional
+    public ResultReturn finishTownBook(Long townBookId, User masterUser, User otherUser){
+        Long tempPointA = masterUser.getPoint();
+        masterUser.setPoint(tempPointA+150);
+        Long tempPointB = otherUser.getPoint();
+        otherUser.setPoint(tempPointB+100);
+        TownBook finishBook = townBookRepository.findById(townBookId).orElseThrow(
+                ()-> new IllegalArgumentException("책이 존재하지 않습니다")
+        );
+        finishBook.setFinish(1);
+        return new ResultReturn(true,"포인트 지급 완료");
     }
 
 }

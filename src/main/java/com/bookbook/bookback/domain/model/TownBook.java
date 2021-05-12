@@ -68,6 +68,9 @@ public class TownBook extends Timestamped {
     @Column(name="views", nullable=true)
     private Integer views;
 
+    @Column(nullable = true)
+    private  int finish = 0;
+
 
     public TownBook(TownBookDto townBookDto){
         this.username=townBookDto.getUser().getUsername();

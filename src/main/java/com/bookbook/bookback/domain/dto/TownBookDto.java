@@ -22,6 +22,7 @@ public class TownBookDto {
     private String contentInfo;
     private String webUrl;
     private Integer views;
+    private int finish;
 
 
     private User user;
