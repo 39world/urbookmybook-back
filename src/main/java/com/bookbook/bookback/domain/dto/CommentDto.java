@@ -15,4 +15,6 @@ public class CommentDto {
     private User user;
 
     private Long townBookId;
+
+    private Long parentId;
 }

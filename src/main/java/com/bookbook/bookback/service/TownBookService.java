@@ -37,6 +37,8 @@ public class TownBookService {
         townBookRepository.save(townBook);
         return new ResultReturn(true, "동네책방 등록 성공!");
     }
+
+
     //등록한 책 정보 수정
     @Transactional
     public ResultReturn updateTownBook(Long townBookId, TownBookDto townBookDto, User user){
@@ -50,6 +52,7 @@ public class TownBookService {
         if(townBookDto.getCaptureImages() == null){
             townBookDto.setCaptureImages(townBook.getCaptureImages());
         }
+
         if(!townBook.getUser().getId().equals(user.getId())){
             return new ResultReturn(false,"수정은 작성자 본인만 가능합니다.");
         }
@@ -89,6 +92,8 @@ public class TownBookService {
         townBook.setViews(views+1);
 
         List<PartCommentDto> partComments = new ArrayList<>();
+
+
         List<Comment> comments = commentRepository.findByTownBookId(townBookId);
         for(Comment comment : comments){
             Long commentId= comment.getId();
