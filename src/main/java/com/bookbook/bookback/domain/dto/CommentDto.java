@@ -1,6 +1,5 @@
 package com.bookbook.bookback.domain.dto;
 
-import com.bookbook.bookback.domain.model.TownBook;
 import com.bookbook.bookback.domain.model.User;
 import lombok.Data;
 

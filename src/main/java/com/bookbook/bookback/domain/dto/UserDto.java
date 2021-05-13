@@ -3,11 +3,7 @@ package com.bookbook.bookback.domain.dto;
 import com.bookbook.bookback.domain.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.data.repository.NoRepositoryBean;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,19 +41,6 @@ public class UserDto {
 
     }
 
-    //유저 프로필 업데이트용 Dto 생성
-//    public UserDto(User user, JSONObject userJson, String fileUrl){
-//        this.id = user.getId();
-//        this.email = user.getEmail();
-//        this.username = userJson.getString("username");
-//        if(fileUrl.isEmpty()){
-//            this.image = user.getImage();
-//        } else {
-//            this.image = fileUrl;
-//        }
-//        this.town = userJson.getString("town");
-//        this.comment = userJson.getString("comment");
-//    }
 
         public UserDto(User user, JSONObject userJson){
         this.id = user.getId();

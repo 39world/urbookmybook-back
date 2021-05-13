@@ -2,14 +2,11 @@ package com.bookbook.bookback.domain.model;
 
 
 import com.bookbook.bookback.domain.dto.CommentDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

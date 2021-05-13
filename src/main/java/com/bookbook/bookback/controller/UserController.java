@@ -52,29 +52,6 @@ public class UserController {
         return new ResultReturn(true, userDto,"프로필 조회 완료");
     }
 
-    //프로필 수정  multipart date-form 데이터를 받아 수정 진행
-    //front 요청으로 코드 수정
-//    @RequestMapping("/api/profile")
-//    public UserDto profileChange(@RequestPart String userData, @RequestParam(required = false) MultipartFile file, HttpServletRequest httpServletRequest) {
-//        JSONObject userJson = new JSONObject(userData);
-//        //토근에서 사용자 정보 추출
-//        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-//        String email = jwtTokenProvider.getUserPk(token);
-//        User member = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-//        if(file == null){
-//                UserDto userDto = new UserDto(member,userJson);
-//                userService.update(userDto);
-//                return userDto;
-//        } else{
-//            String fileUrl = fileUploadService.uploadImage(file);
-//            //해당 사용자의 프로필 업데이트
-//            UserDto userDto = new UserDto(member,userJson,fileUrl);
-//            userService.update(userDto);
-//            return userDto;
-//        }
-//    }
-
 
 //    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
     @RequestMapping("/api/profile")
@@ -106,7 +83,6 @@ public class UserController {
     public ResultReturn loginUser(@RequestBody UserDto userDto ) {
         log.info("email:{}, username:{}, imaege:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
         Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
-        //email 존재 여부 확인
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             String token = jwtTokenProvider.createToken(user.getEmail());

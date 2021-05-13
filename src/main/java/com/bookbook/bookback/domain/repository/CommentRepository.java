@@ -2,7 +2,6 @@ package com.bookbook.bookback.domain.repository;
 
 import com.bookbook.bookback.domain.model.Comment;
 import com.bookbook.bookback.domain.model.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
