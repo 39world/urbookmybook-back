@@ -18,9 +18,6 @@ public class TownBook extends Timestamped {
     @Column
     private Long id;
 
-    @Column(name = "username", nullable = true)
-    private String username;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -70,7 +67,6 @@ public class TownBook extends Timestamped {
 
 
     public TownBook(TownBookDto townBookDto){
-        this.username=townBookDto.getUser().getUsername();
         this.title=townBookDto.getTitle();
         this.author = townBookDto.getAuthor();
         this.image = townBookDto.getImage();

@@ -81,7 +81,7 @@ public class UserController {
     //google social login test code
     @PostMapping("/api/login")
     public ResultReturn loginUser(@RequestBody UserDto userDto ) {
-        log.info("email:{}, username:{}, imaege:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
+        log.info("email:{}, username:{}, image:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
         Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
