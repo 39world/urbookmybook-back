@@ -37,4 +37,31 @@ public class UserDto {
         this.token = token;
 
     }
+
+
+
+    public UserDto(User user, JSONObject userJson){
+        this.id = user.getId();
+        this.email = user.getEmail();
+        if(userJson.isNull("username")){
+            this.username = user.getUsername();
+        } else{
+            this.username = userJson.getString("username");
+        }
+        if(userJson.isNull("image")){
+            this.image = user.getImage();
+        } else{
+            this.image = userJson.getString("image");
+        }
+        if(userJson.isNull("town")){
+            this.town = user.getTown();
+        } else{
+            this.town = userJson.getString("town");
+        }
+        if(userJson.isNull("comment")){
+            this.comment = user.getComment();
+        } else{
+            this.comment = userJson.getString("comment");
+        }
+    }
 }

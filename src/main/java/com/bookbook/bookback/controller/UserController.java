@@ -20,11 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -55,14 +53,18 @@ public class UserController {
 
 //    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
     @RequestMapping("/api/profile")
-    public ResultReturn profileChange(@RequestBody UserDto userDto, HttpServletRequest httpServletRequest) {
+    public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
+        JSONObject userJson = new JSONObject(userData);
         //토근에서 사용자 정보 추출
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email)
+        User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
-        return userService.update(userDto, user);
-
+        //해당 사용자의 프로필 업데이트
+        UserDto userDto = new UserDto(member,userJson);
+        System.out.println(userDto.getTown());
+        userService.update(userDto);
+        return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
 //    //프로필 사진 등록 api
 //    //등록된 사진의 url을 반환
