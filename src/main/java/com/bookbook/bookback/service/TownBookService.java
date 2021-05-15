@@ -157,6 +157,7 @@ public class TownBookService {
     public ResultReturn getMyTownBooks(User user) {
 
         List<TownBook> townBookList = townBookRepository.findByUser(user);
+        System.out.println(townBookList);
 
 
         return new ResultReturn(true ,townBookList, "댓글 반환 성공!");

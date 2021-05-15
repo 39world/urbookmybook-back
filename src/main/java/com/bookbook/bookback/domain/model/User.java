@@ -53,6 +53,7 @@ public class User {
     }
 
     public void update(UserDto userDto){
+        this.id = userDto.getId();
         this.username = userDto.getUsername();
         this.image = userDto.getImage();
         this.town = userDto.getTown();
