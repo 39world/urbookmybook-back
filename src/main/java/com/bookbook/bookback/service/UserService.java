@@ -36,6 +36,7 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저가 존재하지 않습니다.")
         );
+        System.out.println(userDto.getTown());
         //프로필 변경 시 타운이 변경되면 해당 유저가 등록한 책들의 타운값도 변경해준다.
         if (userDto.getTown() != null) {
             System.out.println(user);

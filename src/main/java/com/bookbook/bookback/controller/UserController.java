@@ -62,6 +62,7 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
         //해당 사용자의 프로필 업데이트
         UserDto userDto = new UserDto(member,userJson);
+        System.out.println(userDto.getTown());
         userService.update(userDto);
         return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
