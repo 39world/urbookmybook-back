@@ -32,11 +32,8 @@ public class UserDto {
         this.town = user.getTown();
         this.comment = user.getComment();
         this.star = user.getStar();
-
         this.scrapList=user.getScrapList();
-
         this.point = user.getPoint();
-
         this.token = token;
 
     }
