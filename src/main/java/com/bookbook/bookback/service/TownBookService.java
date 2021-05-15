@@ -61,7 +61,6 @@ public class TownBookService {
         }
 
         else{
-            townBook.setTown(user.getTown());
             townBook.update(townBookDto);
             return new ResultReturn(true,"수정이 완료되었습니다.");
         }

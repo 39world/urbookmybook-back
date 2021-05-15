@@ -20,6 +20,7 @@ public class User {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String username;
     private String password;
     private String email;
@@ -40,20 +41,9 @@ public class User {
     // OAuth를 위해 구성한 추가 필드 2개
     private String provider;
     private String providerId;
+
     @CreationTimestamp
     private Timestamp createdAt;
-
-//    [
-//    private String username
-//    private String email
-//    private String image
-//
-//
-//     public void update(userdto userdto)
-//     this.username = userDto.getUsername();
-//     this.image = userDto.getImage();
-//    ]
-
 
     public User(UserDto userDto){
         this.email = userDto.getEmail();
@@ -63,7 +53,6 @@ public class User {
     }
 
     public void update(UserDto userDto){
-        this.id = userDto.getId();
         this.username = userDto.getUsername();
         this.image = userDto.getImage();
         this.town = userDto.getTown();

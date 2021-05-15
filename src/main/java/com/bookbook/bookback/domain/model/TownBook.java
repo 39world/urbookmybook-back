@@ -4,11 +4,7 @@ import com.bookbook.bookback.domain.dto.TownBookDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -21,9 +17,6 @@ public class TownBook extends Timestamped {
     @Id
     @Column
     private Long id;
-
-    @Column(name = "username", nullable = true)
-    private String username;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -74,7 +67,6 @@ public class TownBook extends Timestamped {
 
 
     public TownBook(TownBookDto townBookDto){
-        this.username=townBookDto.getUser().getUsername();
         this.title=townBookDto.getTitle();
         this.author = townBookDto.getAuthor();
         this.image = townBookDto.getImage();
