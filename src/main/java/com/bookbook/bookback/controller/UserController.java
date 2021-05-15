@@ -140,4 +140,10 @@ public class UserController {
         return userService.deleteMyScrapList(townBookId, user);
     }
 
+
+    @GetMapping("/api/testapi")
+    public String testapi(){
+        return "잘~~ 작동합니다";
+    }
+
 }
