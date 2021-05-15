@@ -159,7 +159,7 @@ public class TownBookService {
         List<TownBook> townBookList = townBookRepository.findByUser(user);
 
 
-        return new ResultReturn(true ,townBookList, "댓글 반환 성공!");
+        return new ResultReturn(true ,townBookList, "내 게시글 리스트 반환 성공!");
     }
 
 
