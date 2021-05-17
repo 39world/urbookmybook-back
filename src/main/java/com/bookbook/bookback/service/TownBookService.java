@@ -34,7 +34,7 @@ public class TownBookService {
     //교환할 책 등록
     public ResultReturn createTownBook(User user,TownBookDto townBookDto){
         townBookDto.setUser(user);
-//        townBookDto.setTown(user.getTown());
+        townBookDto.setTown(user.getTown());
         townBookDto.setViews(0);
         TownBook townBook = new TownBook(townBookDto);
         townBookRepository.save(townBook);
