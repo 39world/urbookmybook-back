@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -144,6 +145,17 @@ public class UserController {
     @GetMapping("/api/testapi")
     public String testapi(){
         return "잘~~ 작동합니다";
+    }
+
+    // 기능 테스트용 자체 회원가입, 로그인
+    @PostMapping("/api/signup")
+    public Long join(@RequestBody Map<String, String> user) {
+        return userRepository.save(User.builder( )
+                .email(user.get("email"))
+                .password(passwordEncoder.encode(user.get("password")))
+                .username(user.get("username"))
+                .role("ROLE_USER")
+                .build()).getId();
     }
 
 }
