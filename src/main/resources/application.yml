@@ -4,20 +4,30 @@ spring:
   h2:
     console:
       enabled: true
-  jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#  jpa:
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
 
 ---
 spring:
   profiles: set1
 server:
   port: 8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 ---
 spring:
   profiles: set2
 server:
   port: 8082
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
