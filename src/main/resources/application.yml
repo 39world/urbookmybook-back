@@ -4,12 +4,10 @@ spring:
   h2:
     console:
       enabled: true
-#  jpa:
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
-
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
 ---
 spring:
   profiles: set1
