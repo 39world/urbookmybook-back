@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -25,8 +26,8 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     @Column
     private String roomName;
 
-    @Column
-    private String userInterested;
+    @ElementCollection
+    private List<String> chatUser;
 
     private long userCount; // 채팅방 인원수
 
@@ -34,7 +35,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.roomName = chatRoomDto.getRoomName();
-        chatRoom.userInterested = chatRoomDto.getUserInterested();
+        chatRoom.chatUser = chatRoomDto.getChatUser();
         return chatRoom;
     }
 
