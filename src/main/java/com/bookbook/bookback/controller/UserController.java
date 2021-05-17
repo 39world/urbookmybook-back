@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -51,7 +52,7 @@ public class UserController {
     }
 
 
-//    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
+    //    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
     @RequestMapping("/api/profile")
     public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
         JSONObject userJson = new JSONObject(userData);
@@ -66,7 +67,7 @@ public class UserController {
         userService.update(userDto);
         return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
-//    //프로필 사진 등록 api
+    //    //프로필 사진 등록 api
 //    //등록된 사진의 url을 반환
     @PostMapping("/api/upload")
     public ResultReturn uploadImage(@RequestPart(required = false) MultipartFile file) {
@@ -78,21 +79,21 @@ public class UserController {
     }
 
     //google social login test code
-    @PostMapping("/api/login")
-    public ResultReturn loginUser(@RequestBody UserDto userDto ) {
-        log.info("email:{}, username:{}, image:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
-        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            String token = jwtTokenProvider.createToken(user.getEmail());
-            return new ResultReturn(true, token, "회원가입이 된 사람입니다.");
-        } else {
-            User user = new User(userDto);
-            userRepository.save(user);
-            String token = jwtTokenProvider.createToken(user.getEmail());
-            return new ResultReturn(true, token, "로그인이 되었습니다.");
-        }
-    }
+//    @PostMapping("/api/login")
+//    public ResultReturn loginUser(@RequestBody UserDto userDto ) {
+//        log.info("email:{}, username:{}, image:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
+//        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            String token = jwtTokenProvider.createToken(user.getEmail());
+//            return new ResultReturn(true, token, "회원가입이 된 사람입니다.");
+//        } else {
+//            User user = new User(userDto);
+//            userRepository.save(user);
+//            String token = jwtTokenProvider.createToken(user.getEmail());
+//            return new ResultReturn(true, token, "로그인이 되었습니다.");
+//        }
+//    }
 
     //내가 등록한 게시글 조회
     @GetMapping("/api/users/townbooks")
@@ -145,5 +146,30 @@ public class UserController {
     public String testapi(){
         return "잘~~ 작동합니다";
     }
+
+    // 기능 테스트용 자체 회원가입, 로그인
+    @PostMapping("/api/signup")
+    public Long join(@RequestBody Map<String, String> user) {
+        return userRepository.save(User.builder( )
+                .email(user.get("email"))
+                .password(passwordEncoder.encode(user.get("password")))
+                .username(user.get("username"))
+                .role("ROLE_USER")
+                .build()).getId();
+    }
+
+    @PostMapping("/api/login")
+    public UserDto login(@RequestBody Map<String, String> user) {
+        User member = userRepository.findByEmail(user.get("email"))
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+
+        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+        String token = jwtTokenProvider.createToken(member.getEmail());
+        UserDto userDto = new UserDto(token,member);
+        return userDto;
+    }
+
 
 }
