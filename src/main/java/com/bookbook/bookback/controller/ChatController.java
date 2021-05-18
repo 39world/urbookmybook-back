@@ -14,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
     private final ChatMessageRepository chatMessageRepository;
 
     /**
-     * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
+     * websocket "/pub/api/chat/message"로 들어오는 메시징을 처리한다.
      */
     @GetMapping("/api/chat/message/{roomId}")
     @ResponseBody
@@ -43,7 +40,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
         return messages;
     }
 
-    @MessageMapping("/api/chat/message") // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/chat/message로 발행 요청
+    @MessageMapping("/api/chat/message") // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/api/chat/message로 발행 요청
     public void message(@RequestBody ChatMessage message, @Header("token") String token) {
         System.out.println("pub으로 들어온 메세지 확인");
         System.out.println(message);

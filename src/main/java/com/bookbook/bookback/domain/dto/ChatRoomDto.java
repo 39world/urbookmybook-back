@@ -11,5 +11,5 @@ import java.util.List;
 @Getter
 public class ChatRoomDto {
     private String roomName;
-    private List<Long> chatUser;
+    private List<String> chatUser;
 }

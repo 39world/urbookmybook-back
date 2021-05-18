@@ -38,7 +38,7 @@ public class UserController {
     private final FileUploadService fileUploadService;
 
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정
-    @RequestMapping("/api/usercheck")
+    @GetMapping("/api/usercheck")
     public ResultReturn userInfo(HttpServletRequest httpServletRequest) {
     /*
     HTTP Request의 Header로 넘어온 token을 쪼개어 누구인지 나타내주는 과정
@@ -53,7 +53,7 @@ public class UserController {
 
 
 //    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
-    @RequestMapping("/api/profile")
+    @PutMapping("/api/profile")
     public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
         JSONObject userJson = new JSONObject(userData);
         //토근에서 사용자 정보 추출

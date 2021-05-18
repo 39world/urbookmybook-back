@@ -27,7 +27,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     private String roomName;
 
     @ElementCollection
-    private List<Long> chatUser;
+    private List<String> chatUser;
 
     private long userCount; // 채팅방 인원수
 
@@ -38,5 +38,12 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
         chatRoom.chatUser = chatRoomDto.getChatUser();
         return chatRoom;
     }
+
+    //roomname 삭제.
+    //유저 닉네임, 유저 프로필 사진, 책 이미지 ?
+    //유저 프로필 변경 시 같이 바꿔지도록 할 수 있을것인가
+    //중복 채팅방 생성 방지
+    //Redis를 이용한 실시간 알림 기능
+    // 채팅방이 만들어졌거나 채팅이 왔을 때 사용자에게 알려줄 수 있도록.
 
 }

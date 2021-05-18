@@ -39,7 +39,9 @@ public class ChatRoomService {
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다. -> 이것으로 채팅방은 지워지지 않음
     public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
         ChatRoom chatRoom = ChatRoom.create(chatRoomDto);
+        System.out.println("채팅방 생성 완료");
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        System.out.println("레디스 저장 완료");
         return chatRoom;
     }
 
