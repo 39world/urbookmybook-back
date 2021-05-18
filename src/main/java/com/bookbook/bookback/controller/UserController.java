@@ -155,6 +155,7 @@ public class UserController {
                 .password(passwordEncoder.encode(user.get("password")))
                 .username(user.get("username"))
                 .role("ROLE_USER")
+                .point(0L)
                 .build()).getId();
     }
 
