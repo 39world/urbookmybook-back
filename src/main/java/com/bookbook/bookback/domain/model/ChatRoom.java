@@ -27,7 +27,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     private String roomName;
 
     @ElementCollection
-    private List<String> chatUser;
+    private List<Long> chatUser;
 
     private long userCount; // 채팅방 인원수
 
