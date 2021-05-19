@@ -26,8 +26,12 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     @Column
     private String roomName;
 
-    @ElementCollection
-    private List<String> chatUser;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<User> user;
+
+    @Column
+    private String image;
 
     private long userCount; // 채팅방 인원수
 
@@ -35,7 +39,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.roomName = chatRoomDto.getRoomName();
-        chatRoom.chatUser = chatRoomDto.getChatUser();
+        chatRoom.image = chatRoomDto.getImage();
         return chatRoom;
     }
 

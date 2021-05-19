@@ -2,6 +2,8 @@ package com.bookbook.bookback.service;
 
 import com.bookbook.bookback.domain.dto.ChatRoomDto;
 import com.bookbook.bookback.domain.model.ChatRoom;
+import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
@@ -18,6 +20,8 @@ public class ChatRoomService {
     private static final String CHAT_ROOMS = "CHAT_ROOM"; // 채팅룸 저장
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
+    private final UserRepository userRepository;
+
 
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, ChatRoom> hashOpsChatRoom;
@@ -39,9 +43,12 @@ public class ChatRoomService {
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다. -> 이것으로 채팅방은 지워지지 않음
     public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
         ChatRoom chatRoom = ChatRoom.create(chatRoomDto);
-        System.out.println("채팅방 생성 완료");
+        for(String email : chatRoomDto.getChatUser()){
+            User tempUser = userRepository.findByEmail(email)
+                             .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+            chatRoom.getUser().add(tempUser);
+        }
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        System.out.println("레디스 저장 완료");
         return chatRoom;
     }
 

@@ -57,12 +57,8 @@ public class ChatRoomController {
     //채팅방 생성(parameter : roomName, user_email)
     @PostMapping("/create")
     public ResultReturn createRoom(@RequestBody ChatRoomDto chatRoomDto) {
-        System.out.println(chatRoomDto.getChatUser());
-        System.out.println(chatRoomDto.getRoomName());
         ChatRoom createdRoom = chatRoomService.createChatRoom(chatRoomDto);
-        System.out.println("생성완료");
         chatRoomRepository.save(createdRoom);
-        System.out.println("저장완료");
         return new ResultReturn(true, createdRoom,"채팅방 생성 완료");
     }
 
@@ -80,16 +76,16 @@ public class ChatRoomController {
         //토큰에서 사용자 정보 추출
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저체크, 일치하는 E-MAIL이 없습니다"));
         //유저 목록에서 제거
-        chatRoom.getChatUser().remove(email);
+        chatRoom.getUser().remove(user);
         //남아있는 유저가 없을 경우 DB에서 삭제
-        if(chatRoom.getChatUser().isEmpty()){
+        if(chatRoom.getUser().isEmpty()){
             chatRoomRepository.delete(chatRoom);
         }
         else{
             //유저가 남아있다면 나가는 유저 정보를 가져와서 채팅방에 남아있는 인원에게 퇴장 메세지 전송
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new IllegalArgumentException("유저체크, 일치하는 E-MAIL이 없습니다"));
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).userName(user.getUsername()).build());
         }
         return new ResultReturn(true,"채팅방 나가기 완료");
