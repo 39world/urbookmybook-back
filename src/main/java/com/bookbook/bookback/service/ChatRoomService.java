@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,9 +47,11 @@ public class ChatRoomService {
         for(String email : chatRoomDto.getChatUser()){
             User tempUser = userRepository.findByEmail(email)
                              .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+            System.out.println(tempUser);
             chatRoom.getUser().add(tempUser);
+            System.out.println(chatRoom.getUser());
         }
-        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+//        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
 

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +27,9 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     @Column
     private String roomName;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<User> user;
+    @ManyToMany
+    @JoinColumn(name = "chat_user_many")
+    private List<User> user = new ArrayList<>();
 
     @Column
     private String image;
