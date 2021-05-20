@@ -37,7 +37,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
 
     public static ChatRoom create(ChatRoomDto chatRoomDto) {
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
+        chatRoom.roomId = chatRoomDto.getRoomId();
         chatRoom.roomName = chatRoomDto.getRoomName();
         chatRoom.image = chatRoomDto.getImage();
         return chatRoom;
