@@ -49,7 +49,9 @@ public class ChatRoomController {
         //토큰에서 사용자 정보 추출
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllByChatUser(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방 조회, 일치하는 E-MAIL이 없습니다"));
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllByUser(user);
         return new ResultReturn(true, chatRooms,"참여중인 채팅방 조회 완료");
     }
 
