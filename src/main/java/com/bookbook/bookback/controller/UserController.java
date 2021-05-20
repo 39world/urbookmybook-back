@@ -165,29 +165,29 @@ public class UserController {
 
     }
 
-    @PostMapping("/api/login")
-    public ResultReturn login(@RequestBody Map<String, String> user) {
-        User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
-            return new ResultReturn(false,"비밀번호가 일치하지 않아용 ") ;
-        }
-        String token = jwtTokenProvider.createToken(member.getEmail());
-        UserDto userDto = new UserDto(token,member);
-        return new ResultReturn(true,"로그인완료",userDto) ;
-    }
 //    @PostMapping("/api/login")
-//    public UserDto login(@RequestBody Map<String, String> user) {
+//    public ResultReturn login(@RequestBody Map<String, String> user) {
 //        User member = userRepository.findByEmail(user.get("email"))
 //                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-//
 //        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
-//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//            return new ResultReturn(false,"비밀번호가 일치하지 않아용 ") ;
 //        }
 //        String token = jwtTokenProvider.createToken(member.getEmail());
 //        UserDto userDto = new UserDto(token,member);
-//        return userDto;
+//        return new ResultReturn(true,"로그인완료",userDto) ;
 //    }
+    @PostMapping("/api/login")
+    public UserDto login(@RequestBody Map<String, String> user) {
+        User member = userRepository.findByEmail(user.get("email"))
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+
+        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+        String token = jwtTokenProvider.createToken(member.getEmail());
+        UserDto userDto = new UserDto(token,member);
+        return userDto;
+    }
 
 
 
