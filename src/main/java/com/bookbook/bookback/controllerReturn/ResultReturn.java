@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 public class ResultReturn {
+    public static Long member;
     private Boolean ok;
     private Object results;
     private String msg;

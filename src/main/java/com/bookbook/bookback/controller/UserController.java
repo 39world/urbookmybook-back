@@ -3,9 +3,7 @@ package com.bookbook.bookback.controller;
 import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.controllerReturn.ResultReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
-import com.bookbook.bookback.domain.model.TownBook;
 import com.bookbook.bookback.domain.model.User;
-import com.bookbook.bookback.domain.repository.TownBookRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.CommentService;
 import com.bookbook.bookback.service.FileUploadService;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
 import java.util.Map;
 import java.util.Optional;
 
@@ -149,14 +146,22 @@ public class UserController {
 
     // 기능 테스트용 자체 회원가입, 로그인
     @PostMapping("/api/signup")
-    public Long join(@RequestBody Map<String, String> user) {
-        return userRepository.save(User.builder( )
-                .email(user.get("email"))
-                .password(passwordEncoder.encode(user.get("password")))
-                .username(user.get("username"))
-                .role("ROLE_USER")
-                .point(0L)
-                .build()).getId();
+    public ResultReturn signup(@RequestBody Map<String, String> user) {
+        Optional<User> member = userRepository.findByEmail(user.get("email"));
+        if(member.isPresent()){
+            return new ResultReturn(false, "중복된 이메일이 존재합니다 .");
+        }
+        else {
+            userRepository.save(User.builder()
+                    .email(user.get("email"))
+                    .password(passwordEncoder.encode(user.get("password")))
+                    .username(user.get("username"))
+                    .role("ROLE_USER")
+                    .point(0L)
+                    .build());
+        }
+        return new ResultReturn(true,"회원가입완료") ;
+
     }
 
     @PostMapping("/api/login")
