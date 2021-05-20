@@ -2,6 +2,8 @@ package com.bookbook.bookback.controller;
 
 
 import com.bookbook.bookback.config.security.JwtTokenProvider;
+import com.bookbook.bookback.domain.dto.ChatMessageDto;
+import com.bookbook.bookback.domain.dto.ChatUserDto;
 import com.bookbook.bookback.domain.model.ChatMessage;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.ChatMessageRepository;
@@ -49,17 +51,37 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
 
 
     @MessageMapping("/api/chat/message") // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/api/chat/message로 발행 요청
-    public void message(@RequestBody ChatMessage message, @Header("token") String token) {
+    public void message(@RequestBody ChatMessageDto chatMessageDto, @Header("token") String token) {
         System.out.println("pub으로 들어온 메세지 확인");
-        System.out.println(message);
+        System.out.println(chatMessageDto);
+        System.out.println(chatMessageDto.getUser());
         System.out.println("토큰 유효성 확인");
         String email = jwtTokenProvider.getUserPk(token); //회원의 대화명을 가져와 token 유효성 체크
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
         String nickname = member.getUsername();
         System.out.println("토큰 유효성 확인 완료, 해당 닉네임 : "+ nickname);
-        // 헤더에서 토큰을 읽어 로그인 회원 정보로 대화명 설정
-        message.setUserName(nickname);
+
+        ChatMessage message = new ChatMessage();
+        //메시지 저장
+        message.setMessage(chatMessageDto.getText());
+
+        //프로필 저장
+        message.setUserProfile(chatMessageDto.getUser().getAvatar());
+
+        //이름 저장
+        message.setUserName(chatMessageDto.getUser().getName());
+
+        //타입 저장
+        message.setType(chatMessageDto.getUser().getType());
+
+        //룸ID 저장
+        message.setRoomId(chatMessageDto.getUser().getRoomId());
+
+
+//        // 헤더에서 토큰을 읽어 로그인 회원 정보로 대화명 설정
+//        message.setUserName(nickname);
+
         System.out.println(message);
         // 채팅방 인원수 세팅
         message.setUserCount(chatRoomService.getUserCount(message.getRoomId()));
