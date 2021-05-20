@@ -156,7 +156,7 @@ public class UserController {
                     .email(user.get("email"))
                     .password(passwordEncoder.encode(user.get("password")))
                     .username(user.get("username"))
-                    .image("image")
+                    .image(user.get("image"))
                     .role("ROLE_USER")
                     .point(0L)
                     .build());
