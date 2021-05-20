@@ -51,7 +51,7 @@ public class ChatRoomService {
             chatRoom.getUser().add(tempUser);
             System.out.println(chatRoom.getUser());
         }
-//        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
 
