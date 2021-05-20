@@ -13,4 +13,5 @@ public class ChatRoomDto {
     private String roomName;
     private List<String> chatUser;
     private String image;
+    private String roomId;
 }

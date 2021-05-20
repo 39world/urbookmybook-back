@@ -84,7 +84,11 @@ public class ChatRoomController {
         chatRoom.getUser().remove(user);
         //남아있는 유저가 없을 경우 DB에서 삭제
         if(chatRoom.getUser().isEmpty()){
+
             chatRoomRepository.delete(chatRoom);
+
+            //추가
+            chatRoomService.deleteChatRoom(roomId);
         }
         else{
             //유저가 남아있다면 나가는 유저 정보를 가져와서 채팅방에 남아있는 인원에게 퇴장 메세지 전송
