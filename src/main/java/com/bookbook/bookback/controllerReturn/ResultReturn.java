@@ -1,6 +1,7 @@
 package com.bookbook.bookback.controllerReturn;
 
 import com.bookbook.bookback.domain.dto.CommentDto;
+import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.Comment;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +36,11 @@ public class ResultReturn {
         this.msg = null;
     }
     public ResultReturn(boolean ok, CommentDto commentDto, List<Comment> commentList, String msg) {
+    }
+
+    public ResultReturn(boolean ok, String msg, UserDto userDto) {
+        this.ok=ok;
+        this.results= userDto.getToken();
+        this.msg=msg;
     }
 }
