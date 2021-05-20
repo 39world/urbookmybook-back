@@ -1,5 +1,6 @@
 package com.bookbook.bookback.domain.model;
 
+import com.bookbook.bookback.domain.dto.ChatUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,5 +49,8 @@ public class ChatMessage {
 
     @Column
     private String timenow;
+
+    @Column
     private long userCount; // 채팅방 인원수, 채팅방 내에서 메시지가 전달될때 인원수 갱신시 사용
+
 }

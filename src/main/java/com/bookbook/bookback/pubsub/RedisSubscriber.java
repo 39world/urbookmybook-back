@@ -23,6 +23,9 @@ public class RedisSubscriber {
             System.out.println("sub 메세지 확인");
             // ChatMessage 객채로 맵핑
             ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+
+            System.out.println(chatMessage.getRoomId());
+
             System.out.println("message 맵핑 완료");
             System.out.println(chatMessage);
             // 채팅방을 구독한 클라이언트에게 메시지 발송
