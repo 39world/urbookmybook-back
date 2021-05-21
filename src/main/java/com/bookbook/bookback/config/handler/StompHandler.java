@@ -34,7 +34,6 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
             String jwtToken = accessor.getFirstNativeHeader("token");
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            System.out.println("연결 요청 확인 :"+sessionId);
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증 -> 유효하지 않다면 websocket 연결을 하지 않음
             jwtTokenProvider.validateToken(jwtToken);

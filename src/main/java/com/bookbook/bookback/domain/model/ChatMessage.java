@@ -4,8 +4,11 @@ import com.bookbook.bookback.domain.dto.ChatUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 @Getter
 @Setter
@@ -49,6 +52,9 @@ public class ChatMessage {
 
     @Column
     private String timenow;
+
+    @Column
+    private Hashtable<String,String> user;
 
     @Column
     private long userCount; // 채팅방 인원수, 채팅방 내에서 메시지가 전달될때 인원수 갱신시 사용
