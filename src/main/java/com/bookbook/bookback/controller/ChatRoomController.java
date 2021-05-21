@@ -59,9 +59,15 @@ public class ChatRoomController {
     //채팅방 생성(parameter : roomName, user_email)
     @PostMapping("/create")
     public ResultReturn createRoom(@RequestBody ChatRoomDto chatRoomDto) {
-        ChatRoom createdRoom = chatRoomService.createChatRoom(chatRoomDto);
-        chatRoomRepository.save(createdRoom);
-        return new ResultReturn(true, createdRoom,"채팅방 생성 완료");
+
+        ChatRoom chatRoom=chatRoomRepository.findByRoomId(chatRoomDto.getRoomId());
+        if(chatRoom==null){
+            chatRoom= chatRoomService.createChatRoom(chatRoomDto);
+            chatRoomRepository.save(chatRoom);
+
+        }
+        return new ResultReturn(true, chatRoom,"채팅방 생성 완료");
+
     }
 
     //특정 채팅방 입장. 채팅방에 저장된 메세지 반환
