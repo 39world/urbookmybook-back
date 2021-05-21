@@ -6,6 +6,7 @@ import com.bookbook.bookback.domain.dto.ChatRoomDto;
 import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.ChatMessage;
 import com.bookbook.bookback.domain.model.ChatRoom;
+import com.bookbook.bookback.domain.model.ChatUser;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.ChatMessageRepository;
 import com.bookbook.bookback.domain.repository.ChatRoomRepository;
@@ -91,8 +92,12 @@ public class ChatRoomController {
             chatRoomService.deleteChatRoom(roomId);
         }
         else{
+            ChatMessage chatMessage= new ChatMessage();
+            chatMessage.getUser().setType(ChatUser.MessageType.QUIT);
+            chatMessage.getUser().setRoomId(roomId);
+            chatMessage.getUser().setName(user.getUsername());
             //유저가 남아있다면 나가는 유저 정보를 가져와서 채팅방에 남아있는 인원에게 퇴장 메세지 전송
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).userName(user.getUsername()).build());
+            chatService.sendChatMessage(chatMessage);
         }
         return new ResultReturn(true,"채팅방 나가기 완료");
     }

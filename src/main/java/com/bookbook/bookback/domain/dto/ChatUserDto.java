@@ -9,5 +9,5 @@ public class ChatUserDto {
     private String avatar;
     private String name;
     private String roomId;
-    private ChatMessage.MessageType type;
+    private int type;
 }

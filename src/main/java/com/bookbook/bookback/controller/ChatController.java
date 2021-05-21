@@ -5,9 +5,11 @@ import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.domain.dto.ChatMessageDto;
 import com.bookbook.bookback.domain.dto.ChatUserDto;
 import com.bookbook.bookback.domain.model.ChatMessage;
+import com.bookbook.bookback.domain.model.ChatUser;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.ChatMessageRepository;
 import com.bookbook.bookback.domain.repository.ChatRoomRepository;
+import com.bookbook.bookback.domain.repository.ChatUserRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.ChatRoomService;
 import com.bookbook.bookback.service.ChatService;
@@ -31,6 +33,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
     private final ChatService chatService;
     private final UserRepository userRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final ChatUserRepository chatUserRepository;
 
     /**
      * websocket "/pub/api/chat/message"로 들어오는 메시징을 처리한다.
@@ -62,34 +65,42 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
         String nickname = member.getUsername();
         System.out.println("토큰 유효성 확인 완료, 해당 닉네임 : "+ nickname);
 
-        ChatMessage message = new ChatMessage();
-        //메시지 저장
-        message.setMessage(chatMessageDto.getText());
+        ChatMessage chatMessage = new ChatMessage();
+        ChatUser chatUser= new ChatUser();
 
+        //생성시간 저장
+        chatMessage.setCreatedAt(chatMessageDto.getCreatedAt());
+
+        //메시지 저장
+        chatMessage.setText(chatMessageDto.getText());
+
+
+        //유저 ID저장
+        chatUser.set_id(chatMessage.getUser().get_id());
         //프로필 저장
-        message.setUserProfile(chatMessageDto.getUser().getAvatar());
+        chatUser.setAvatar(chatMessageDto.getUser().getAvatar());
 
         //이름 저장
-        message.setUserName(chatMessageDto.getUser().getName());
-
-        //타입 저장
-        message.setType(chatMessageDto.getUser().getType());
+        chatUser.setName(chatMessageDto.getUser().getName());
 
         //룸ID 저장
-        message.setRoomId(chatMessageDto.getUser().getRoomId());
+        chatUser.setRoomId(chatMessageDto.getUser().getRoomId());
 
+        //타입 저장
+        chatUser.setType(ChatUser.MessageType.TALK);
 
-//        // 헤더에서 토큰을 읽어 로그인 회원 정보로 대화명 설정
-//        message.setUserName(nickname);
+        //chatMessage에 user 저장
+        chatMessage.setUser(chatUser);
 
-        System.out.println(message);
-        // 채팅방 인원수 세팅
-        message.setUserCount(chatRoomService.getUserCount(message.getRoomId()));
-        System.out.println("채팅방 인원수 세팅 완료");
-        System.out.println(message);
+        System.out.println(chatMessage);
+        System.out.println(chatUser);
+
         // Websocket에 발행된 메시지를 redis로 발행(publish)
-        chatService.sendChatMessage(message); // 메서드 일원화
-        chatMessageRepository.save(message);
+        chatService.sendChatMessage(chatMessage); // 메서드 일원화
+
+        chatMessageRepository.save(chatMessage);
+//        chatUserRepository.save(chatUser);
+
         System.out.println("메세지 송부 요청 완료");
     }
 }
