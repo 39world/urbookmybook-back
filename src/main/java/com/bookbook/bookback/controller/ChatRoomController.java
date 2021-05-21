@@ -60,12 +60,8 @@ public class ChatRoomController {
     @PostMapping("/create")
     public ResultReturn createRoom(@RequestBody ChatRoomDto chatRoomDto) {
 
-        ChatRoom chatRoom=chatRoomRepository.findByRoomId(chatRoomDto.getRoomId());
-        if(chatRoom==null){
-            chatRoom= chatRoomService.createChatRoom(chatRoomDto);
-            chatRoomRepository.save(chatRoom);
+        ChatRoom chatRoom= chatRoomService.createChatRoom(chatRoomDto);
 
-        }
         return new ResultReturn(true, chatRoom,"채팅방 생성 완료");
 
     }
