@@ -1,6 +1,5 @@
 package com.bookbook.bookback.domain.model;
 
-import com.bookbook.bookback.domain.dto.ChatUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,6 +51,6 @@ public class ChatMessage {
     @Column
     private String timenow;
 
-
-
+    @Column
+    private String email;
 }
