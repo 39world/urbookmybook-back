@@ -38,7 +38,6 @@ public class ChatService { //입장, 퇴장 처리
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
         String dTime = formatter.format(systemTime);
         chatMessage.setTimenow(dTime);
-        chatMessage.setUserCount(chatRoomService.getUserCount(chatMessage.getRoomId()));
         System.out.println("보낼 유저 수 셋 완료");
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             System.out.println(chatMessage);

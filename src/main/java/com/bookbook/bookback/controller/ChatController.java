@@ -62,7 +62,7 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
         message.setUserName(nickname);
         System.out.println("토큰 유효성 확인 완료, 해당 닉네임 : "+ nickname);
         // 채팅방 인원수 세팅
-        message.setUserCount(chatRoomService.getUserCount(message.getRoomId()));
+
         System.out.println("채팅방 인원수 세팅 완료");
         System.out.println(message);
         // Websocket에 발행된 메시지를 redis로 발행(publish)

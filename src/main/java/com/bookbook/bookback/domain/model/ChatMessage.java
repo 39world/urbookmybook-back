@@ -19,13 +19,12 @@ public class ChatMessage {
     }
 
     @Builder
-    public ChatMessage(MessageType type, String roomId, String userName, String userProfile, String message, long userCount) {
+    public ChatMessage(MessageType type, String roomId, String userName, String userProfile, String message) {
         this.type = type;
         this.roomId = roomId;
         this.userName = userName;
         this.userProfile = userProfile;
         this.message = message;
-        this.userCount = userCount;
     }
 
     // 메시지 타입 : 입장, 퇴장, 채팅
@@ -53,10 +52,6 @@ public class ChatMessage {
     @Column
     private String timenow;
 
-    @Column
-    private Hashtable<String,String> user;
 
-    @Column
-    private long userCount; // 채팅방 인원수, 채팅방 내에서 메시지가 전달될때 인원수 갱신시 사용
 
 }
