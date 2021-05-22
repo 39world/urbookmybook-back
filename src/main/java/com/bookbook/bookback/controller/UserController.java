@@ -188,7 +188,11 @@ public class UserController {
 //        UserDto userDto = new UserDto(token,member);
 //        return userDto;
 //    }
-
+    @DeleteMapping("/api/users/{userId}")
+    public Long delete(@PathVariable Long userId){
+        userRepository.deleteById(userId);
+        return userId;
+    }
 
 
 }
