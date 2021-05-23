@@ -4,6 +4,7 @@ import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.controllerReturn.ResultReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
 import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.TownBookRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.CommentService;
 import com.bookbook.bookback.service.FileUploadService;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder; //추후 패스워드 변경에서 사용 예정
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final TownBookRepository townBookRepository;
     private final UserService userService;
     private final TownBookService townBookService;
     private final CommentService commentService;
@@ -49,11 +52,10 @@ public class UserController {
     }
 
 
-//    //프로필 사진이 있을 경우 파일 업로드를 진행 후 json 데이터에 반환된 파일 url을 넣어주면 사용 가능.
+    //프로필 정부 수정
     @PutMapping("/api/users/profile")
     public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
         JSONObject userJson = new JSONObject(userData);
-        //토근에서 사용자 정보 추출
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User member = userRepository.findByEmail(email)
@@ -64,8 +66,8 @@ public class UserController {
         userService.update(userDto);
         return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
-//    //프로필 사진 등록 api
-//    //등록된 사진의 url을 반환
+
+    //프로필 이미지 등록
     @PostMapping("/api/upload")
     public ResultReturn uploadImage(@RequestPart(required = false) MultipartFile file) {
         if(file == null){
@@ -76,23 +78,23 @@ public class UserController {
     }
 
     //google social login test code
-//    @PostMapping("/api/login")
-//    public ResultReturn loginUser(@RequestBody UserDto userDto ) {
-//        log.info("email:{}, username:{}, image:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
-//        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            String token = jwtTokenProvider.createToken(user.getEmail());
-//            return new ResultReturn(true, token, "회원가입이 된 사람입니다.");
-//        } else {
-//            User user = new User(userDto);
-//            userRepository.save(user);
-//            String token = jwtTokenProvider.createToken(user.getEmail());
-//            return new ResultReturn(true, token, "로그인이 되었습니다.");
-//        }
-//    }
+    @PostMapping("/api/users/login/google")
+    public ResultReturn loginUser(@RequestBody UserDto userDto ) {
+        log.info("email:{}, username:{}, image:{}",userDto.getEmail(),userDto.getUsername(),userDto.getImage());
+        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String token = jwtTokenProvider.createToken(user.getEmail());
+            return new ResultReturn(true, token, "회원가입이 된 사람입니다.");
+        } else {
+            User user = new User(userDto);
+            userRepository.save(user);
+            String token = jwtTokenProvider.createToken(user.getEmail());
+            return new ResultReturn(true, token, "로그인이 되었습니다.");
+        }
+    }
 
-    //내가 등록한 게시글 조회
+    //내가 등록한 모든 게시글 조회
     @GetMapping("/api/users/townbooks")
     public ResultReturn getMyTownBooks ( HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -114,7 +116,7 @@ public class UserController {
         return commentService.getMyComments(user);
     }
 
-    //관심 있는 책 리스트 조회
+    //스크랩한 모든 게시글 조회
     @GetMapping("/api/users/scraps")
     public ResultReturn getMyScrapList(HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -126,7 +128,7 @@ public class UserController {
         return userService.getMyScrapList(user);
     }
 
-    //관심 있는 책 삭제
+    //스크랩 리스트에서 선택한 게시글 삭제
     @DeleteMapping("/api/users/scraps/{townBookId}")
     public ResultReturn deleteMyScrapList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
@@ -138,13 +140,7 @@ public class UserController {
         return userService.deleteMyScrapList(townBookId, user);
     }
 
-
-    @GetMapping("/api/testapi")
-    public String testapi(){
-        return "잘~~ 작동합니다";
-    }
-
-    // 기능 테스트용 자체 회원가입, 로그인
+    //일반 회원가입
     @PostMapping("/api/users/signup")
     public ResultReturn signup(@RequestBody Map<String, String> user) {
         Optional<User> member = userRepository.findByEmail(user.get("email"));
@@ -165,6 +161,7 @@ public class UserController {
 
     }
 
+    //일반 로그인
     @PostMapping("/api/users/login")
     public ResultReturn login(@RequestBody Map<String, String> user) {
         User member = userRepository.findByEmail(user.get("email"))
@@ -176,23 +173,23 @@ public class UserController {
         UserDto userDto = new UserDto(token,member);
         return new ResultReturn(true,userDto,"로그인완료") ;
     }
-//    @PostMapping("/api/login")
-//    public UserDto login(@RequestBody Map<String, String> user) {
-//        User member = userRepository.findByEmail(user.get("email"))
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-//
-//        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
-//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-//        }
-//        String token = jwtTokenProvider.createToken(member.getEmail());
-//        UserDto userDto = new UserDto(token,member);
-//        return userDto;
-//    }
+
+    //회원 탈퇴
+    @Transactional
     @DeleteMapping("/api/users/{userId}")
     public Long delete(@PathVariable Long userId){
+
+        User user=userRepository.findById(userId).orElse(null);
+
+        //유저가 등록한 모든 책 삭제
+        townBookRepository.deleteAllByUser(user);
+
+        //채팅룸에서 탈퇴한 유저 삭제
+
+        //유저가 작성한 댓글 삭제
+
+        //유저 삭제
         userRepository.deleteById(userId);
         return userId;
     }
-
-
 }

@@ -28,7 +28,7 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     private String roomName;
 
     @ManyToMany
-    @JoinColumn(name = "chat_user_many")
+    @JoinColumn(name = "chet_room_user")
     private List<User> user = new ArrayList<>();
 
     @Column

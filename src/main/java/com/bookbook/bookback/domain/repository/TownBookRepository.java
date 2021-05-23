@@ -20,4 +20,5 @@ public interface TownBookRepository extends JpaRepository<TownBook,Long> {
 
     List<TownBook> findByUser(User user);
 
+    void deleteAllByUser(User user);
 }
