@@ -3,7 +3,11 @@ package com.bookbook.bookback.controller;
 import com.bookbook.bookback.config.security.JwtTokenProvider;
 import com.bookbook.bookback.controllerReturn.ResultReturn;
 import com.bookbook.bookback.domain.dto.UserDto;
+import com.bookbook.bookback.domain.model.ChatRoom;
+import com.bookbook.bookback.domain.model.Comment;
 import com.bookbook.bookback.domain.model.User;
+import com.bookbook.bookback.domain.repository.ChatRoomRepository;
+import com.bookbook.bookback.domain.repository.CommentRepository;
 import com.bookbook.bookback.domain.repository.TownBookRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import com.bookbook.bookback.service.CommentService;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,6 +37,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final TownBookRepository townBookRepository;
+    private final CommentRepository commentRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final UserService userService;
     private final TownBookService townBookService;
     private final CommentService commentService;
@@ -185,8 +192,18 @@ public class UserController {
         townBookRepository.deleteAllByUser(user);
 
         //채팅룸에서 탈퇴한 유저 삭제
+        List<ChatRoom> chatRooms = chatRoomRepository.findAll();
+        for(ChatRoom chatRoom : chatRooms){
+            chatRoom.getUser().remove(user);
+        }
 
-        //유저가 작성한 댓글 삭제
+
+        //작성한 댓글의 유저정보를 1번으로 변경
+        List<Comment> comments=  commentRepository.findByUser(user);
+        User userForOut= userRepository.findById(1L).orElse(null);
+        for(Comment comment: comments){
+            comment.setUser(userForOut);
+        }
 
         //유저 삭제
         userRepository.deleteById(userId);
