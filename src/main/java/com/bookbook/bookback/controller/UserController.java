@@ -150,14 +150,14 @@ public class UserController {
     //일반 회원가입
     @PostMapping("/api/users/signup")
     public ResultReturn signup(@RequestBody Map<String, String> user) {
-        Optional<User> member = userRepository.findByEmail(user.get("email"));
+        Optional<User> member = userRepository.findByEmail(user.get("email").trim());
         if(member.isPresent()){
             return new ResultReturn(false, "중복된 이메일이 존재합니다 .");
         }
         else {
             userRepository.save(User.builder()
                     .email(user.get("email"))
-                    .password(passwordEncoder.encode(user.get("password")))
+                    .password(passwordEncoder.encode(user.get("password").trim()))
                     .username(user.get("username"))
                     .image(user.get("image"))
                     .role("ROLE_USER")
@@ -171,9 +171,9 @@ public class UserController {
     //일반 로그인
     @PostMapping("/api/users/login")
     public ResultReturn login(@RequestBody Map<String, String> user) {
-        User member = userRepository.findByEmail(user.get("email"))
+        User member = userRepository.findByEmail(user.get("email").trim())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+        if (!passwordEncoder.matches(user.get("password").trim(), member.getPassword())) {
             return new ResultReturn(false,"비밀번호가 일치하지 않아용 ") ;
         }
         String token = jwtTokenProvider.createToken(member.getEmail());

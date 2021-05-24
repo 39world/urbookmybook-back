@@ -133,7 +133,5 @@ public class TownBookController {
                 ()->new IllegalArgumentException("other 유저가 존재하지 않습니다.")
         );
         return townBookService.finishTownBook(townBookId,masterUser,otherUser);
-
     }
-
 }
