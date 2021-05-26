@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 //@CrossOrigin(origins = "*")
@@ -74,6 +75,7 @@ public class ChatRoomController {
     }
 
     //채팅방 퇴장 테스트 필요
+    @Transactional
     @PutMapping("/quit/{roomId}")
     public ResultReturn quitRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
         ChatRoom chatRoom  = chatRoomService.findRoomById(roomId);
@@ -86,6 +88,10 @@ public class ChatRoomController {
         chatRoom.getUser().remove(user);
         //남아있는 유저가 없을 경우 DB에서 삭제
         if(chatRoom.getUser().isEmpty()){
+
+            //chatRoom을 삭제하기 전에 townBook과의 관계설정을 제거한다.
+            chatRoom.setTownBook(null);
+
             chatRoomRepository.delete(chatRoom);
             //redis상 채팅방 정보 삭제
             chatRoomService.deleteChatRoom(roomId);

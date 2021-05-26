@@ -154,13 +154,13 @@ public class TownBookService {
     }
 
     //내가 등록한 게시글 리스트 조회
-    public ResultReturn getMyTownBooks(User user) {
+    public ResultReturn getUserTownBooks(User user) {
 
         List<TownBook> townBookList = townBookRepository.findByUser(user);
         System.out.println(townBookList);
 
 
-        return new ResultReturn(true ,townBookList, "댓글 반환 성공!");
+        return new ResultReturn(true ,townBookList, "게시글 리스트 반환 성공!");
     }
 
 

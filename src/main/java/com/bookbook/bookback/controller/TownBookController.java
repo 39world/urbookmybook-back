@@ -134,4 +134,13 @@ public class TownBookController {
         );
         return townBookService.finishTownBook(townBookId,masterUser,otherUser);
     }
+
+
+    //상대방이 등록한 게시글 조회하기
+    @GetMapping("/api/townbooks/users/{userId}")
+    public ResultReturn getUserTownBooks ( @PathVariable Long userId){
+
+        User user = userRepository.findById(userId).orElse(null);
+        return townBookService.getUserTownBooks(user);
+    }
 }

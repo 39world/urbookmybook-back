@@ -2,8 +2,10 @@ package com.bookbook.bookback.service;
 
 import com.bookbook.bookback.domain.dto.ChatRoomDto;
 import com.bookbook.bookback.domain.model.ChatRoom;
+import com.bookbook.bookback.domain.model.TownBook;
 import com.bookbook.bookback.domain.model.User;
 import com.bookbook.bookback.domain.repository.ChatRoomRepository;
+import com.bookbook.bookback.domain.repository.TownBookRepository;
 import com.bookbook.bookback.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -24,6 +26,7 @@ public class ChatRoomService {
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final TownBookRepository townBookRepository;
 
 
     @Resource(name = "redisTemplate")
@@ -47,9 +50,13 @@ public class ChatRoomService {
     public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
 
         ChatRoom chatRoom=chatRoomRepository.findByRoomId(chatRoomDto.getRoomId());
-
         if(chatRoom==null){
             chatRoom = ChatRoom.create(chatRoomDto);
+
+            //ChatRoom에 join 된 TownBook 설정
+            TownBook townBook=townBookRepository.findById(chatRoomDto.getTownBookId()).orElse(null);
+            chatRoom.setTownBook(townBook);
+
             for(String email : chatRoomDto.getChatUser()){
                 User tempUser = userRepository.findByEmail(email)
                         .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));

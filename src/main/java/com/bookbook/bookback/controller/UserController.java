@@ -109,7 +109,7 @@ public class UserController {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalArgumentException("내가 쓴 게시글 조회, 아이디가 존재하지 않습니다.")
         );
-        return townBookService.getMyTownBooks(user);
+        return townBookService.getUserTownBooks(user);
     }
 
     //내가 쓴 댓글 조회

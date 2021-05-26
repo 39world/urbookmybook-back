@@ -34,7 +34,13 @@ public class ChatRoom implements Serializable { // redis에 저장되는 객체�
     @Column
     private String image;
 
-    private long userCount; // 채팅방 인원수
+    @Column
+    private Long userCount=0L;// 채팅방 인원수
+
+    @OneToOne
+    @JoinColumn(name="town_book_id")
+    private TownBook townBook;
+
 
     public static ChatRoom create(ChatRoomDto chatRoomDto) {
         ChatRoom chatRoom = new ChatRoom();
