@@ -138,9 +138,9 @@ public class TownBookController {
 
     //상대방이 등록한 게시글 조회하기
     @GetMapping("/api/townbooks/users/{userId}")
-    public ResultReturn getUserTownBooks ( @PathVariable Long userId){
+    public ResultReturn getUserTownBooks ( @PathVariable String email){
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByEmail(email).orElse(null);
         return townBookService.getUserTownBooks(user);
     }
 }
