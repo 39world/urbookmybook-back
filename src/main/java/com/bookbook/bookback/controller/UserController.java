@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,20 +60,50 @@ public class UserController {
     }
 
 
+//    //프로필 정부 수정
+//    @PutMapping("/api/users/profile")
+//    public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
+//        JSONObject userJson = new JSONObject(userData);
+//        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+//        String email = jwtTokenProvider.getUserPk(token);
+//        User member = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
+//        //해당 사용자의 프로필 업데이트
+//        UserDto userDto = new UserDto(member,userJson);
+//        System.out.println(userDto.getTown());
+//        userService.update(userDto);
+//        return new ResultReturn(true, userDto,"프로필 변경 완료");
+//    }
+
     //프로필 정부 수정
     @PutMapping("/api/users/profile")
-    public ResultReturn profileChange(@RequestBody String userData, HttpServletRequest httpServletRequest) {
-        JSONObject userJson = new JSONObject(userData);
+    public ResultReturn profileChange(@RequestPart String userData, @RequestPart MultipartFile file, HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
+
+        String image=fileUploadService.uploadImage(file);
+
+        String encodedData=   new String(userData.getBytes("iso-8859-1"), "utf-8");
+        JSONObject userJson = new JSONObject(encodedData);
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         String email = jwtTokenProvider.getUserPk(token);
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
         //해당 사용자의 프로필 업데이트
         UserDto userDto = new UserDto(member,userJson);
-        System.out.println(userDto.getTown());
+
+        //기존 프로필 이미지 출력
+        System.out.println(userDto.getImage());
+
+        if(image!=null)
+            userDto.setImage(image);
+
+        //수정된 프로필 이미지 출력
+        System.out.println(userDto.getImage());
+
         userService.update(userDto);
         return new ResultReturn(true, userDto,"프로필 변경 완료");
     }
+
+
 
     //프로필 이미지 등록
     @PostMapping("/api/upload")

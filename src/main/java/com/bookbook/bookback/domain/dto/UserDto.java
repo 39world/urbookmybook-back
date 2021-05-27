@@ -3,9 +3,11 @@ package com.bookbook.bookback.domain.dto;
 import com.bookbook.bookback.domain.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.json.JSONObject;
 import java.util.List;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class UserDto {

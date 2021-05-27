@@ -50,22 +50,6 @@ public class TownBookController {
         return townBookService.getTownBooks(user, page , size, sortBy, isAsc);
     }
 
-    //동네책장에 책 등록
-    @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest) {
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("책 등록, 아이디가 존재하지 않습니다.")
-        );
-
-        if(townBookDto==null){
-            return new ResultReturn(false, "Dto가 존재하지 않습니다");
-        }
-
-        return townBookService.createTownBook(user, townBookDto);
-    }
-
     //등록한 책 정보 수정
     @PutMapping("/api/townbooks/{townBookId}")
     public ResultReturn updateTownBook(@PathVariable Long townBookId, @RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest){
