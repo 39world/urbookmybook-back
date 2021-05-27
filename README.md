@@ -1,3 +1,5 @@
+![https://github.com/39world/urbookmybook-back/blob/ffc3305983434c9a4ab7fffa4e462855f24bc0ef/src/images/%EC%8D%B8%EB%84%A4%EC%9D%BC.png](https://github.com/39world/urbookmybook-back/blob/ffc3305983434c9a4ab7fffa4e462855f24bc0ef/src/images/%EC%8D%B8%EB%84%A4%EC%9D%BC.png) 
+
 ## mainProject "책과 콩나무" Backend
 
 함께 독서하고 추천하는 오프라인 도서 교환 서비스
@@ -130,6 +132,9 @@ RDB 엔진: MySQL
 ![https://github.com/39world/urbookmybook-back/blob/main/src/images/Untitled%2011.png](https://github.com/39world/urbookmybook-back/blob/main/src/images/Untitled%2011.png)   
 <br><br>
 
+### 5. **🎞 소개영상**
 
+### **[유튜브 링크](https://youtu.be/5ARyzQe7ass )**
+<br><br>
 
 
