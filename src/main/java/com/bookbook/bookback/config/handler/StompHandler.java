@@ -34,7 +34,7 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
             String jwtToken = accessor.getFirstNativeHeader("token");
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            log.info("CONNECT {}", jwtToken);
+            log.info("CONNECT {},{}", jwtToken,sessionId);
             // Header의 jwt token 검증 -> 유효하지 않다면 websocket 연결을 하지 않음
             jwtTokenProvider.validateToken(jwtToken);
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) { // 채팅룸 구독요청
@@ -42,28 +42,13 @@ public class StompHandler implements ChannelInterceptor {
             String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            System.out.println("구독 요청 확인 :"+sessionId);
-            System.out.println("룸 아이디 : "+roomId);
             chatRoomService.setUserEnterInfo(sessionId, roomId);
-            // 채팅방의 인원수를 +1한다.
-            chatRoomService.plusUserCount(roomId);
-            //유저 닉네임을 가져온다.
-//            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-            //입장 메세지 전송
-//            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).userName(name).build());
             log.info("SUBSCRIBED {}, {}", sessionId,roomId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String roomId = chatRoomService.getUserEnterRoomId(sessionId);
-            System.out.println("세션 아이디 :"+sessionId);
-            System.out.println("룸 아이디 확인 : "+ roomId);
-            // 채팅방의 인원수를 -1한다.
-            System.out.println("인원수 -1 ");
             chatRoomService.minusUserCount(roomId);
-            // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
-//            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
-//            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).userName(name).build());
             // 퇴장한 클라이언트의 roomId 맵핑 정보를 삭제한다.
             chatRoomService.removeUserEnterInfo(sessionId);
             log.info("DISCONNECTED {}, {}", sessionId, roomId);

@@ -3,11 +3,8 @@ package com.bookbook.bookback.domain.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 @Getter
 @Setter

@@ -52,8 +52,6 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
 
     @MessageMapping("/api/chat/message") // 웹소켓으로 들어오는 메시지 발행 처리 -> 클라이언트에서는 /pub/api/chat/message로 발행 요청
     public void message(@RequestBody ChatMessage message, @Header("token") String token) {
-        System.out.println("pub으로 들어온 메세지 확인");
-        System.out.println("토큰 유효성 확인");
         String email = jwtTokenProvider.getUserPk(token); //회원의 대화명을 가져와 token 유효성 체크
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
@@ -63,7 +61,6 @@ public class ChatController {//ChatService에서 입/퇴장을 처리하기 때�
         message.setUserName(nickname);
         System.out.println("토큰 유효성 확인 완료, 해당 닉네임 : "+ nickname);
         // 채팅방 인원수 세팅
-        System.out.println("채팅방 인원수 세팅 완료");
         System.out.println(message);
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);

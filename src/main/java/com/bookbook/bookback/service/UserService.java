@@ -39,11 +39,8 @@ public class UserService {
         System.out.println(userDto.getTown());
         //프로필 변경 시 타운이 변경되면 해당 유저가 등록한 책들의 타운값도 변경해준다.
         if (userDto.getTown() != null) {
-            System.out.println(user);
             List<TownBook> townBookList = townBookRepository.findByUser(user);
-            System.out.println(townBookList);
             for (TownBook townBook : townBookList) {
-                System.out.println(townBook);
                 townBook.setTown(userDto.getTown());
             }
         }
