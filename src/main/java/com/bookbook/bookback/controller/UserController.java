@@ -205,7 +205,7 @@ public class UserController {
         User member = userRepository.findByEmail(user.get("email").trim())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
         if (!passwordEncoder.matches(user.get("password").trim(), member.getPassword())) {
-            return new ResultReturn(false,"비밀번호가 일치하지 않아용 ") ;
+            return new ResultReturn(false,"비밀번호가 일치하지 않습니다. ") ;
         }
         String token = jwtTokenProvider.createToken(member.getEmail());
         UserDto userDto = new UserDto(token,member);
