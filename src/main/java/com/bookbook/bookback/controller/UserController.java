@@ -203,13 +203,16 @@ public class UserController {
     @PostMapping("/api/users/login")
     public ResultReturn login(@RequestBody Map<String, String> user) {
         User member = userRepository.findByEmail(user.get("email").trim())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
-        if (!passwordEncoder.matches(user.get("password").trim(), member.getPassword())) {
-            return new ResultReturn(false,"비밀번호가 일치하지 않습니다. ") ;
+                .orElse(null);
+        if (member == null){
+            return new ResultReturn(false,"로그인 오류, 존재하지 않는 Email 입니다. ") ;
+        }
+        else if (!passwordEncoder.matches(user.get("password").trim(), member.getPassword())) {
+            return new ResultReturn(false,"로그인 오류, 비밀번호가 일치하지 않습니다. ") ;
         }
         String token = jwtTokenProvider.createToken(member.getEmail());
         UserDto userDto = new UserDto(token,member);
-        return new ResultReturn(true,userDto,"로그인완료") ;
+        return new ResultReturn(true,userDto,"로그인 완료") ;
     }
 
     //회원 탈퇴
