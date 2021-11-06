@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -181,6 +182,15 @@ public class UserController {
     //일반 회원가입
     @PostMapping("/api/users/signup")
     public ResultReturn signup(@RequestBody Map<String, String> user) {
+
+        //이메일 형식 확인
+        String emailRegex = "[a-zA-Z0-9_-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+";
+
+        if (!user.get("email").trim().matches(emailRegex)) {
+            log.info("회원 가입 실패 : 이메일 형식 오류");
+            return new ResultReturn(false, "올바른 이메일 형식이 아닙니다.");
+        }
+
         Optional<User> member = userRepository.findByEmail(user.get("email").trim());
         if(member.isPresent()){
             return new ResultReturn(false, "중복된 이메일이 존재합니다 .");
@@ -191,7 +201,7 @@ public class UserController {
                     .password(passwordEncoder.encode(user.get("password").trim()))
                     .username(user.get("username"))
                     .image(user.get("image"))
-                    .role("ROLE_USER")
+                    .roles(Collections.singletonList("USER"))
                     .point(0L)
                     .build());
         }
