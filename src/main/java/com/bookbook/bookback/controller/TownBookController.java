@@ -35,16 +35,11 @@ public class TownBookController {
 
 //    동네책장 전체 조회
     @GetMapping("/api/townbooks")
-    public ResultReturn getAllBooks( @RequestParam("page") int page, HttpServletRequest httpServletRequest) {
+    public ResultReturn getAllBooks( @RequestParam("page") int page, @AuthenticationPrincipal User user) {
 
         int size=10;
         String sortBy="CreatedAt";
         boolean isAsc= false;
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("전체 조회, 아이디가 존재하지 않습니다.")
-        );
 
         page = page - 1;
         return townBookService.getTownBooks(user, page , size, sortBy, isAsc);
@@ -52,13 +47,7 @@ public class TownBookController {
 
     //동네책장에 책 등록
     @PostMapping("/api/townbooks")
-    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest) {
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("책 등록, 아이디가 존재하지 않습니다.")
-        );
-
+    public ResultReturn createTownBook(@RequestBody TownBookDto townBookDto, @AuthenticationPrincipal User user) {
         if(townBookDto==null){
             return new ResultReturn(false, "Dto가 존재하지 않습니다");
         }
@@ -68,23 +57,13 @@ public class TownBookController {
     
     //등록한 책 정보 수정
     @PutMapping("/api/townbooks/{townBookId}")
-    public ResultReturn updateTownBook(@PathVariable Long townBookId, @RequestBody TownBookDto townBookDto, HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("책 정보 수정, 아이디가 존재하지 않습니다.")
-        );
+    public ResultReturn updateTownBook(@PathVariable Long townBookId, @RequestBody TownBookDto townBookDto, @AuthenticationPrincipal User user){
         return townBookService.updateTownBook(townBookId,townBookDto, user);
     }
 
     //등록한 책 삭제
     @DeleteMapping("/api/townbooks/{townBookId}")
-    public ResultReturn deleteTownBook(@PathVariable Long townBookId,HttpServletRequest httpServletRequest) {
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("책 삭제, 아이디가 존재하지 않습니다.")
-        );
+    public ResultReturn deleteTownBook(@PathVariable Long townBookId, @AuthenticationPrincipal User user) {
         return townBookService.deleteTownBook(townBookId, user);
     }
 
@@ -113,12 +92,7 @@ public class TownBookController {
 
     //관심책 등록하기
     @PostMapping("/api/townbooks/scraps/{townBookId}")
-    public ResultReturn putToMyWishList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                ()->new IllegalArgumentException("스크랩 등록, 아이디가 존재하지 않습니다.")
-        );
+    public ResultReturn putToMyWishList(@PathVariable Long townBookId, @AuthenticationPrincipal User user){
         return townBookService.putToMyScrapList(townBookId, user);
     }
 

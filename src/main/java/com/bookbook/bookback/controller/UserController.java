@@ -17,6 +17,8 @@ import com.bookbook.bookback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -48,14 +50,11 @@ public class UserController {
 
     //Request의 Header로 넘어온 token을 쪼개어 유저정보 확인해주는 과정
     @GetMapping("/api/users/usercheck")
-    public ResultReturn userInfo(HttpServletRequest httpServletRequest) {
+    public ResultReturn userInfo(HttpServletRequest httpServletRequest, @AuthenticationPrincipal User user) {
     /*
     HTTP Request의 Header로 넘어온 token을 쪼개어 누구인지 나타내주는 과정
      */
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저체크, 일치하는 E-MAIL이 없습니다"));
         UserDto userDto = new UserDto(token, user);
         return new ResultReturn(true, userDto,"프로필 조회 완료");
     }
@@ -78,16 +77,12 @@ public class UserController {
 
     //프로필 정부 수정
     @PutMapping("/api/users/profile")
-    public ResultReturn profileChange(@RequestPart String userData, @RequestPart MultipartFile file, HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
+    public ResultReturn profileChange(@RequestPart String userData, @RequestPart MultipartFile file,  @AuthenticationPrincipal User member) throws UnsupportedEncodingException {
 
         String image=fileUploadService.uploadImage(file);
 
         String encodedData=   new String(userData.getBytes("iso-8859-1"), "utf-8");
         JSONObject userJson = new JSONObject(encodedData);
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User member = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("일치하는 E-MAIL이 없습니다"));
         //해당 사용자의 프로필 업데이트
         UserDto userDto = new UserDto(member,userJson);
 
@@ -135,47 +130,25 @@ public class UserController {
 
     //내가 등록한 모든 게시글 조회
     @GetMapping("/api/users/townbooks")
-    public ResultReturn getMyTownBooks ( HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("내가 쓴 게시글 조회, 아이디가 존재하지 않습니다.")
-        );
+    public ResultReturn getMyTownBooks (@AuthenticationPrincipal User user){
         return townBookService.getUserTownBooks(user);
     }
 
     //내가 쓴 댓글 조회
     @GetMapping("/api/users/comments")
-    public ResultReturn getMyComments (HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("내 댓글 조회, 아이디가 존재하지 않습니다.")
-        );
+    public ResultReturn getMyComments (@AuthenticationPrincipal User user){
         return commentService.getMyComments(user);
     }
 
     //스크랩한 모든 게시글 조회
     @GetMapping("/api/users/scraps")
-    public ResultReturn getMyScrapList(HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("스크랩 조회, 아이디가 존재하지 않습니다.")
-        );
-
+    public ResultReturn getMyScrapList(@AuthenticationPrincipal User user){
         return userService.getMyScrapList(user);
     }
 
     //스크랩 리스트에서 선택한 게시글 삭제
     @DeleteMapping("/api/users/scraps/{townBookId}")
-    public ResultReturn deleteMyScrapList(@PathVariable Long townBookId, HttpServletRequest httpServletRequest){
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("스크랩 삭제, 아이디가 존재하지 않습니다.")
-        );
-
+    public ResultReturn deleteMyScrapList(@PathVariable Long townBookId, @AuthenticationPrincipal User user){
         return userService.deleteMyScrapList(townBookId, user);
     }
 

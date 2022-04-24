@@ -14,6 +14,7 @@ import com.bookbook.bookback.service.ChatRoomService;
 import com.bookbook.bookback.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,12 +47,7 @@ public class ChatRoomController {
 //    }
     //참여중인 채팅방 조회
     @GetMapping("/rooms")
-    public ResultReturn profileChange(HttpServletRequest httpServletRequest){
-        //토큰에서 사용자 정보 추출
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방 조회, 일치하는 E-MAIL이 없습니다"));
+    public ResultReturn profileChange(@AuthenticationPrincipal User user){
         List<ChatRoom> chatRooms = chatRoomRepository.findAllByUser(user);
         return new ResultReturn(true, chatRooms,"참여중인 채팅방 조회 완료");
     }
@@ -77,14 +73,8 @@ public class ChatRoomController {
     //채팅방 퇴장 테스트 필요
     @Transactional
     @PutMapping("/quit/{roomId}")
-    public ResultReturn quitRoom(@PathVariable String roomId, HttpServletRequest httpServletRequest){
+    public ResultReturn quitRoom(@PathVariable String roomId,@AuthenticationPrincipal User user){
         ChatRoom chatRoom  = chatRoomService.findRoomById(roomId);
-        //토큰에서 사용자 정보 추출
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        String email = jwtTokenProvider.getUserPk(token);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저체크, 일치하는 E-MAIL이 없습니다"));
-        //유저 목록에서 제거
         chatRoom.getUser().remove(user);
         //남아있는 유저가 없을 경우 DB에서 삭제
         if(chatRoom.getUser().isEmpty()){
