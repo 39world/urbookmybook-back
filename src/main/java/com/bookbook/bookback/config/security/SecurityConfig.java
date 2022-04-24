@@ -1,10 +1,8 @@
 package com.bookbook.bookback.config.security;
 
 
-import com.bookbook.bookback.config.oauth.PrincipalOauth2UserService;
 import com.bookbook.bookback.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,8 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
