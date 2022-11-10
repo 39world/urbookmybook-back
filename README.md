@@ -132,9 +132,5 @@ RDB 엔진: MySQL
 ![https://github.com/39world/urbookmybook-back/blob/main/src/images/Untitled%2011.png](https://github.com/39world/urbookmybook-back/blob/main/src/images/Untitled%2011.png)   
 <br><br>
 
-### 5. **🎞 소개영상**
-
-### **[유튜브 링크](https://youtu.be/5ARyzQe7ass )**
-<br><br>
 
 
